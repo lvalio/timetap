@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TimeTap — Design Direction Mockups</title>
+<style>
+  :root {
+    --primary: #4facfe;
+    --primary-hover: #3d8de5;
+    --primary-light: #ebf5ff;
+    --gradient: linear-gradient(135deg, #4facfe, #00f2fe);
+    --text-primary: #1a202c;
+    --text-body: #2d3748;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --text-disabled: #a0aec0;
+    --border: #cbd5e0;
+    --divider: #e2e8f0;
+    --bg-subtle: #edf2f7;
+    --bg-page: #f7fafc;
+    --surface: #ffffff;
+    --success: #38a169;
+    --success-light: #f0fff4;
+    --error: #e53e3e;
+    --error-light: #fff5f5;
+    --warning: #d69e2e;
+    --warning-light: #fffff0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--text-body);
+    background: #1a202c;
+  }
+
+  /* Navigation */
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--divider);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    overflow-x: auto;
+  }
+  .nav h1 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    white-space: nowrap;
+    margin-right: 16px;
+  }
+  .nav-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-body);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 150ms ease;
+  }
+  .nav-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .nav-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+  /* Section */
+  .direction {
+    display: none;
+    padding: 32px;
+    min-height: calc(100vh - 57px);
+  }
+  .direction.active { display: block; }
+
+  .direction-header {
+    max-width: 900px;
+    margin: 0 auto 40px;
+    text-align: center;
+  }
+  .direction-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--surface);
+    margin-bottom: 8px;
+  }
+  .direction-header p {
+    font-size: 16px;
+    color: var(--text-disabled);
+    line-height: 1.5;
+  }
+
+  .mockup-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .mockup-grid.triple { grid-template-columns: 1fr 1fr 1fr; }
+
+  .mockup-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-disabled);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+
+  /* Phone Frame */
+  .phone-frame {
+    width: 375px;
+    margin: 0 auto;
+    background: var(--bg-page);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+  }
+  .desktop-frame {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--bg-page);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+  }
+
+  /* Shared Component Styles */
+  .status-bar {
+    padding: 8px 24px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .bottom-nav {
+    display: flex;
+    border-top: 1px solid var(--divider);
+    background: var(--surface);
+    padding: 8px 0 4px;
+  }
+  .bottom-nav-item {
+    flex: 1;
+    text-align: center;
+    font-size: 10px;
+    color: var(--text-muted);
+    padding: 4px 0;
+  }
+  .bottom-nav-item.active { color: var(--primary); }
+  .bottom-nav-icon {
+    width: 24px;
+    height: 24px;
+    margin: 0 auto 2px;
+    border-radius: 4px;
+    background: var(--divider);
+  }
+  .bottom-nav-item.active .bottom-nav-icon {
+    background: var(--primary-light);
+  }
+
+  .btn-primary {
+    background: var(--gradient);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+  }
+  .btn-outline {
+    background: var(--surface);
+    color: var(--text-body);
+    border: 1px solid var(--border);
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+  }
+
+  .card {
+    background: var(--surface);
+    border-radius: 6px;
+    border: 1px solid var(--divider);
+    padding: 16px;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .tag-success { background: var(--success-light); color: var(--success); }
+  .tag-warning { background: var(--warning-light); color: var(--warning); }
+  .tag-primary { background: var(--primary-light); color: var(--primary); }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .full-width { grid-column: 1 / -1; }
+
+  @media (max-width: 900px) {
+    .mockup-grid { grid-template-columns: 1fr; }
+    .mockup-grid.triple { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <h1>TimeTap Directions</h1>
+  <button class="nav-btn active" onclick="showDirection('d1')">A: Clean Minimal</button>
+  <button class="nav-btn" onclick="showDirection('d2')">B: Gradient Accent</button>
+  <button class="nav-btn" onclick="showDirection('d3')">C: Compact Lists</button>
+  <button class="nav-btn" onclick="showDirection('d4')">D: Bold Hero</button>
+  <button class="nav-btn" onclick="showDirection('d5')">E: Public Page</button>
+  <button class="nav-btn" onclick="showDirection('d6')">F: Customer</button>
+  <button class="nav-btn" onclick="showDirection('d7')">G: Desktop</button>
+  <button class="nav-btn" onclick="showDirection('d8')">H: Onboarding</button>
+</nav>
+
+<!-- DIRECTION A: Clean Minimal Dashboard -->
+<section id="d1" class="direction active">
+  <div class="direction-header">
+    <h2>A: Clean Minimal — Host Dashboard (Mobile)</h2>
+    <p>Maximum whitespace. Flat white cards on subtle background. Gradient only on primary CTAs. Calm, scannable, "between sessions" optimized. The host sees everything they need in one scroll.</p>
+  </div>
+  <div class="mockup-grid">
+    <div>
+      <div class="mockup-label">Home — Today's Overview</div>
+      <div class="phone-frame">
+        <div class="status-bar"><span>9:41</span><span>TimeTap</span></div>
+        <div style="padding: 16px;">
+          <div style="font-size: 24px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Good morning, Sofia</div>
+          <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">Wednesday, Feb 12</div>
+
+          <!-- Today's Sessions -->
+          <div style="font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">Today — 4 sessions</div>
+
+          <div class="card" style="margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Marco R.</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">Growth Path session</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">10:00</div>
+                <div style="font-size: 12px; color: var(--text-muted);">in 25 min</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom: 8px; opacity: 0.7;">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Anna L.</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">Growth Path session</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">11:30</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom: 8px; opacity: 0.5;">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <div>
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Giulia M.</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">Free Intro Call</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">14:00</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity -->
+          <div style="font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 20px 0 8px;">Activity</div>
+
+          <div class="card" style="margin-bottom: 8px;">
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--success); flex-shrink: 0;"></div>
+              <div>
+                <div style="font-size: 14px; color: var(--text-body);">Lucia P. purchased <strong>Growth Path — 10 Sessions</strong></div>
+                <div style="font-size: 12px; color: var(--text-muted);">2 hours ago</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom: 8px;">
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--primary); flex-shrink: 0;"></div>
+              <div>
+                <div style="font-size: 14px; color: var(--text-body);">New free intro booking from <strong>Paolo V.</strong></div>
+                <div style="font-size: 12px; color: var(--text-muted);">Yesterday</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Attention -->
+          <div style="font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 20px 0 8px;">Needs attention</div>
+
+          <div class="card" style="border-left: 3px solid var(--warning); margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 14px; color: var(--text-body);">Anna L. — 1 credit left</div>
+              </div>
+              <span class="tag tag-warning">Low</span>
+            </div>
+          </div>
+
+          <div style="height: 80px;"></div>
+        </div>
+        <div class="bottom-nav">
+          <div class="bottom-nav-item active"><div class="bottom-nav-icon"></div>Home</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Schedule</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Clients</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Packages</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Settings</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="mockup-label">Clients — Overview</div>
+      <div class="phone-frame">
+        <div class="status-bar"><span>9:41</span><span>Clients</span></div>
+        <div style="padding: 16px;">
+          <div style="font-size: 24px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px;">Clients</div>
+
+          <!-- Search -->
+          <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 12px 16px; margin-bottom: 16px; font-size: 14px; color: var(--text-muted);">Search clients...</div>
+
+          <!-- Client Cards -->
+          <div class="card" style="margin-bottom: 8px;">
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <div class="avatar">MR</div>
+              <div style="flex: 1;">
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Marco R.</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">Growth Path</div>
+              </div>
+              <div style="text-align: right;">
+                <span class="tag tag-success">8 credits</span>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Next: Feb 14</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom: 8px;">
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <div class="avatar">AL</div>
+              <div style="flex: 1;">
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Anna L.</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">Growth Path</div>
+              </div>
+              <div style="text-align: right;">
+                <span class="tag tag-warning">1 credit</span>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Next: Today</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom: 8px;">
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <div class="avatar">LP</div>
+              <div style="flex: 1;">
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Lucia P.</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">Growth Path</div>
+              </div>
+              <div style="text-align: right;">
+                <span class="tag tag-success">10 credits</span>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">New client</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom: 8px;">
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <div class="avatar">GM</div>
+              <div style="flex: 1;">
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Giulia M.</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">Free Intro</div>
+              </div>
+              <div style="text-align: right;">
+                <span class="tag tag-primary">Intro</span>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Tomorrow</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom: 8px;">
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <div class="avatar">PV</div>
+              <div style="flex: 1;">
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Paolo V.</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">Free Intro</div>
+              </div>
+              <div style="text-align: right;">
+                <span class="tag tag-primary">Intro</span>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Feb 15</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="height: 80px;"></div>
+        </div>
+        <div class="bottom-nav">
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Home</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Schedule</div>
+          <div class="bottom-nav-item active"><div class="bottom-nav-icon"></div>Clients</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Packages</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Settings</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIRECTION B: Gradient Accent -->
+<section id="d2" class="direction">
+  <div class="direction-header">
+    <h2>B: Gradient Accent — Host Dashboard (Mobile)</h2>
+    <p>More liberal use of the brand gradient. Top header with gradient, section accents, colored indicators. Stronger brand presence, more personality. Still clean, but warmer and more recognizable.</p>
+  </div>
+  <div class="mockup-grid">
+    <div>
+      <div class="mockup-label">Home — Gradient Header</div>
+      <div class="phone-frame">
+        <!-- Gradient header -->
+        <div style="background: var(--gradient); padding: 24px 16px 32px; color: white;">
+          <div style="font-size: 14px; opacity: 0.85; margin-bottom: 4px;">Good morning, Sofia</div>
+          <div style="font-size: 24px; font-weight: 700; margin-bottom: 16px;">Wednesday, Feb 12</div>
+          <div style="display: flex; gap: 16px;">
+            <div style="background: rgba(255,255,255,0.2); border-radius: 6px; padding: 12px 16px; flex: 1; text-align: center;">
+              <div style="font-size: 24px; font-weight: 700;">4</div>
+              <div style="font-size: 12px; opacity: 0.85;">sessions today</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.2); border-radius: 6px; padding: 12px 16px; flex: 1; text-align: center;">
+              <div style="font-size: 24px; font-weight: 700;">8</div>
+              <div style="font-size: 12px; opacity: 0.85;">active clients</div>
+            </div>
+            <div style="background: rgba(255,255,255,0.2); border-radius: 6px; padding: 12px 16px; flex: 1; text-align: center;">
+              <div style="font-size: 24px; font-weight: 700;">1</div>
+              <div style="font-size: 12px; opacity: 0.85;">new booking</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding: 16px; margin-top: -16px;">
+          <!-- Next session card with gradient left border -->
+          <div class="card" style="margin-bottom: 12px; border-left: 3px solid var(--primary);">
+            <div style="font-size: 12px; color: var(--primary); font-weight: 600; margin-bottom: 4px;">NEXT SESSION — in 25 min</div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Marco R.</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">Growth Path</div>
+              </div>
+              <div style="font-size: 20px; font-weight: 700; color: var(--text-primary);">10:00</div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 14px; font-weight: 600; color: var(--text-primary);">Anna L.</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">Growth Path</div>
+              </div>
+              <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">11:30</div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 14px; font-weight: 600; color: var(--text-primary);">Giulia M.</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">Free Intro</div>
+              </div>
+              <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">14:00</div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 14px; font-weight: 600; color: var(--text-primary);">Luca T.</div>
+                <div style="font-size: 12px; color: var(--text-secondary);">Growth Path</div>
+              </div>
+              <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">16:00</div>
+            </div>
+          </div>
+
+          <!-- Activity with gradient dots -->
+          <div style="font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 16px 0 8px;">Recent</div>
+
+          <div style="display: flex; gap: 8px; align-items: start; margin-bottom: 12px;">
+            <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--gradient); margin-top: 5px; flex-shrink: 0;"></div>
+            <div>
+              <div style="font-size: 14px; color: var(--text-body);">Lucia P. purchased Growth Path</div>
+              <div style="font-size: 12px; color: var(--text-muted);">2 hours ago</div>
+            </div>
+          </div>
+
+          <div style="height: 80px;"></div>
+        </div>
+        <div class="bottom-nav">
+          <div class="bottom-nav-item active"><div class="bottom-nav-icon"></div>Home</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Schedule</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Clients</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Packages</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Settings</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="mockup-label">Schedule — Weekly View</div>
+      <div class="phone-frame">
+        <div style="background: var(--gradient); padding: 16px 16px 24px; color: white;">
+          <div style="font-size: 20px; font-weight: 700; margin-bottom: 12px;">Schedule</div>
+          <!-- Day selector -->
+          <div style="display: flex; gap: 4px;">
+            <div style="flex: 1; text-align: center; padding: 8px 0; border-radius: 6px; font-size: 12px;">
+              <div style="opacity: 0.7;">Mon</div><div style="font-weight: 700; margin-top: 2px;">10</div>
+            </div>
+            <div style="flex: 1; text-align: center; padding: 8px 0; border-radius: 6px; font-size: 12px;">
+              <div style="opacity: 0.7;">Tue</div><div style="font-weight: 700; margin-top: 2px;">11</div>
+            </div>
+            <div style="flex: 1; text-align: center; padding: 8px 0; border-radius: 6px; background: rgba(255,255,255,0.25); font-size: 12px;">
+              <div>Wed</div><div style="font-weight: 700; margin-top: 2px;">12</div>
+            </div>
+            <div style="flex: 1; text-align: center; padding: 8px 0; border-radius: 6px; font-size: 12px;">
+              <div style="opacity: 0.7;">Thu</div><div style="font-weight: 700; margin-top: 2px;">13</div>
+            </div>
+            <div style="flex: 1; text-align: center; padding: 8px 0; border-radius: 6px; font-size: 12px;">
+              <div style="opacity: 0.7;">Fri</div><div style="font-weight: 700; margin-top: 2px;">14</div>
+            </div>
+          </div>
+        </div>
+        <div style="padding: 16px; margin-top: -12px;">
+          <!-- Timeline -->
+          <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+            <div style="width: 50px; font-size: 12px; color: var(--text-muted); padding-top: 12px; text-align: right;">10:00</div>
+            <div class="card" style="flex: 1; border-left: 3px solid var(--primary);">
+              <div style="font-size: 14px; font-weight: 600; color: var(--text-primary);">Marco R.</div>
+              <div style="font-size: 12px; color: var(--text-secondary);">Growth Path · 60 min</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+            <div style="width: 50px; font-size: 12px; color: var(--text-muted); padding-top: 12px; text-align: right;">11:30</div>
+            <div class="card" style="flex: 1; border-left: 3px solid var(--primary);">
+              <div style="font-size: 14px; font-weight: 600; color: var(--text-primary);">Anna L.</div>
+              <div style="font-size: 12px; color: var(--text-secondary);">Growth Path · 60 min</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+            <div style="width: 50px; font-size: 12px; color: var(--text-muted); padding-top: 12px; text-align: right;">14:00</div>
+            <div class="card" style="flex: 1; border-left: 3px solid #00f2fe;">
+              <div style="font-size: 14px; font-weight: 600; color: var(--text-primary);">Giulia M.</div>
+              <div style="font-size: 12px; color: var(--text-secondary);">Free Intro · 30 min</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+            <div style="width: 50px; font-size: 12px; color: var(--text-muted); padding-top: 12px; text-align: right;">16:00</div>
+            <div class="card" style="flex: 1; border-left: 3px solid var(--primary);">
+              <div style="font-size: 14px; font-weight: 600; color: var(--text-primary);">Luca T.</div>
+              <div style="font-size: 12px; color: var(--text-secondary);">Growth Path · 60 min</div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-nav">
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Home</div>
+          <div class="bottom-nav-item active"><div class="bottom-nav-icon"></div>Schedule</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Clients</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Packages</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Settings</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIRECTION C: Compact Lists -->
+<section id="d3" class="direction">
+  <div class="direction-header">
+    <h2>C: Compact Lists — Host Dashboard (Mobile)</h2>
+    <p>Denser information display. List-based instead of card-based. More data visible without scrolling. Optimized for hosts with many clients who need to scan quickly. Productivity tool energy.</p>
+  </div>
+  <div class="mockup-grid">
+    <div>
+      <div class="mockup-label">Home — Dense List View</div>
+      <div class="phone-frame">
+        <div class="status-bar"><span>9:41</span><span></span></div>
+        <div style="padding: 12px 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <div style="font-size: 20px; font-weight: 700; color: var(--text-primary);">Today</div>
+            <div style="font-size: 14px; color: var(--primary); font-weight: 500;">Wed, Feb 12</div>
+          </div>
+
+          <!-- Compact stats row -->
+          <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+            <div style="flex: 1; background: var(--surface); border: 1px solid var(--divider); border-radius: 6px; padding: 10px; text-align: center;">
+              <div style="font-size: 20px; font-weight: 700; color: var(--text-primary);">4</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Sessions</div>
+            </div>
+            <div style="flex: 1; background: var(--surface); border: 1px solid var(--divider); border-radius: 6px; padding: 10px; text-align: center;">
+              <div style="font-size: 20px; font-weight: 700; color: var(--success);">1</div>
+              <div style="font-size: 11px; color: var(--text-muted);">New sale</div>
+            </div>
+            <div style="flex: 1; background: var(--surface); border: 1px solid var(--divider); border-radius: 6px; padding: 10px; text-align: center;">
+              <div style="font-size: 20px; font-weight: 700; color: var(--warning);">1</div>
+              <div style="font-size: 11px; color: var(--text-muted);">Low credit</div>
+            </div>
+          </div>
+
+          <!-- Compact session list -->
+          <div style="background: var(--surface); border: 1px solid var(--divider); border-radius: 6px; overflow: hidden; margin-bottom: 16px;">
+            <div style="padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--divider);">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 6px; height: 6px; border-radius: 50%; background: var(--primary);"></div>
+                <span style="font-size: 14px; font-weight: 500; color: var(--text-primary); width: 44px;">10:00</span>
+                <span style="font-size: 14px; color: var(--text-body);">Marco R.</span>
+              </div>
+              <span style="font-size: 12px; color: var(--text-muted);">Growth · 8cr</span>
+            </div>
+            <div style="padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--divider);">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 6px; height: 6px; border-radius: 50%; background: var(--primary);"></div>
+                <span style="font-size: 14px; font-weight: 500; color: var(--text-primary); width: 44px;">11:30</span>
+                <span style="font-size: 14px; color: var(--text-body);">Anna L.</span>
+              </div>
+              <span style="font-size: 12px; color: var(--warning);">Growth · 1cr</span>
+            </div>
+            <div style="padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--divider);">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 6px; height: 6px; border-radius: 50%; background: #00f2fe;"></div>
+                <span style="font-size: 14px; font-weight: 500; color: var(--text-primary); width: 44px;">14:00</span>
+                <span style="font-size: 14px; color: var(--text-body);">Giulia M.</span>
+              </div>
+              <span style="font-size: 12px; color: var(--text-muted);">Free Intro</span>
+            </div>
+            <div style="padding: 10px 12px; display: flex; justify-content: space-between; align-items: center;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 6px; height: 6px; border-radius: 50%; background: var(--primary);"></div>
+                <span style="font-size: 14px; font-weight: 500; color: var(--text-primary); width: 44px;">16:00</span>
+                <span style="font-size: 14px; color: var(--text-body);">Luca T.</span>
+              </div>
+              <span style="font-size: 12px; color: var(--text-muted);">Growth · 5cr</span>
+            </div>
+          </div>
+
+          <!-- Compact activity -->
+          <div style="font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">Recent activity</div>
+          <div style="background: var(--surface); border: 1px solid var(--divider); border-radius: 6px; overflow: hidden;">
+            <div style="padding: 10px 12px; border-bottom: 1px solid var(--divider); font-size: 13px;">
+              <span style="color: var(--success);">+€800</span> <span style="color: var(--text-body);">Lucia P. — Growth Path</span> <span style="color: var(--text-muted); float: right;">2h ago</span>
+            </div>
+            <div style="padding: 10px 12px; border-bottom: 1px solid var(--divider); font-size: 13px;">
+              <span style="color: var(--primary);">Booked</span> <span style="color: var(--text-body);">Paolo V. — Free Intro</span> <span style="color: var(--text-muted); float: right;">Yesterday</span>
+            </div>
+            <div style="padding: 10px 12px; font-size: 13px;">
+              <span style="color: var(--text-muted);">Rescheduled</span> <span style="color: var(--text-body);">Marco R. — Feb 14 → Feb 15</span> <span style="color: var(--text-muted); float: right;">Yesterday</span>
+            </div>
+          </div>
+          <div style="height: 80px;"></div>
+        </div>
+        <div class="bottom-nav">
+          <div class="bottom-nav-item active"><div class="bottom-nav-icon"></div>Home</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Schedule</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Clients</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Packages</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Settings</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="mockup-label">Packages — Management</div>
+      <div class="phone-frame">
+        <div class="status-bar"><span>9:41</span><span></span></div>
+        <div style="padding: 12px 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <div style="font-size: 20px; font-weight: 700; color: var(--text-primary);">Packages</div>
+            <div style="background: var(--gradient); color: white; padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 500;">+ New</div>
+          </div>
+
+          <div class="card" style="margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+              <div>
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Free Intro Call</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">1 session · Free</div>
+              </div>
+              <span class="tag tag-success">Active</span>
+            </div>
+            <div style="display: flex; gap: 16px; font-size: 12px; color: var(--text-muted);">
+              <span>12 booked</span>
+              <span>8 converted</span>
+              <span>67% rate</span>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+              <div>
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Growth Path — 10 Sessions</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">10 sessions · €800</div>
+              </div>
+              <span class="tag tag-success">Active</span>
+            </div>
+            <div style="display: flex; gap: 16px; font-size: 12px; color: var(--text-muted);">
+              <span>6 sold</span>
+              <span>€4,800 total</span>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+              <div>
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Quick Check-in — 3 Sessions</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">3 sessions · €270</div>
+              </div>
+              <span class="tag tag-success">Active</span>
+            </div>
+            <div style="display: flex; gap: 16px; font-size: 12px; color: var(--text-muted);">
+              <span>2 sold</span>
+              <span>€540 total</span>
+            </div>
+          </div>
+
+          <div style="height: 80px;"></div>
+        </div>
+        <div class="bottom-nav">
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Home</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Schedule</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Clients</div>
+          <div class="bottom-nav-item active"><div class="bottom-nav-icon"></div>Packages</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Settings</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIRECTION D: Bold Hero -->
+<section id="d4" class="direction">
+  <div class="direction-header">
+    <h2>D: Bold Hero — Host Dashboard (Mobile)</h2>
+    <p>Larger type, bolder hierarchy, prominent next-session card. Premium, confident feel. The dashboard leads with the most important thing — your next session — and everything else follows.</p>
+  </div>
+  <div class="mockup-grid">
+    <div>
+      <div class="mockup-label">Home — Next Session Focus</div>
+      <div class="phone-frame">
+        <div class="status-bar"><span>9:41</span><span></span></div>
+        <div style="padding: 16px;">
+          <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 2px;">Wednesday, Feb 12</div>
+          <div style="font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 24px;">Hi Sofia</div>
+
+          <!-- Hero next session card -->
+          <div style="background: var(--gradient); border-radius: 12px; padding: 24px; color: white; margin-bottom: 20px;">
+            <div style="font-size: 12px; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">Next session</div>
+            <div style="display: flex; justify-content: space-between; align-items: end;">
+              <div>
+                <div style="font-size: 24px; font-weight: 700; margin-bottom: 4px;">Marco R.</div>
+                <div style="font-size: 14px; opacity: 0.9;">Growth Path</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 32px; font-weight: 700;">10:00</div>
+                <div style="font-size: 14px; opacity: 0.85;">in 25 min</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Remaining sessions as simple list -->
+          <div style="font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">Later today</div>
+
+          <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--divider);">
+            <div>
+              <div style="font-size: 16px; font-weight: 500; color: var(--text-primary);">Anna L.</div>
+              <div style="font-size: 13px; color: var(--text-secondary);">Growth Path</div>
+            </div>
+            <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">11:30</div>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--divider);">
+            <div>
+              <div style="font-size: 16px; font-weight: 500; color: var(--text-primary);">Giulia M.</div>
+              <div style="font-size: 13px; color: var(--text-secondary);">Free Intro</div>
+            </div>
+            <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">14:00</div>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--divider);">
+            <div>
+              <div style="font-size: 16px; font-weight: 500; color: var(--text-primary);">Luca T.</div>
+              <div style="font-size: 13px; color: var(--text-secondary);">Growth Path</div>
+            </div>
+            <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">16:00</div>
+          </div>
+
+          <!-- Alert -->
+          <div style="margin-top: 20px; background: var(--warning-light); border: 1px solid var(--warning); border-radius: 6px; padding: 12px 16px;">
+            <div style="font-size: 14px; color: var(--text-body);"><strong>Anna L.</strong> has 1 credit remaining after today's session.</div>
+          </div>
+
+          <div style="height: 80px;"></div>
+        </div>
+        <div class="bottom-nav">
+          <div class="bottom-nav-item active"><div class="bottom-nav-icon"></div>Home</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Schedule</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Clients</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Packages</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Settings</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="mockup-label">Empty State — Just Onboarded</div>
+      <div class="phone-frame">
+        <div class="status-bar"><span>9:41</span><span></span></div>
+        <div style="padding: 16px;">
+          <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 2px;">Wednesday, Feb 12</div>
+          <div style="font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 32px;">Hi Sofia</div>
+
+          <!-- Empty state -->
+          <div style="text-align: center; padding: 40px 20px;">
+            <div style="width: 80px; height: 80px; margin: 0 auto 20px; background: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+              <div style="width: 40px; height: 40px; background: var(--gradient); border-radius: 6px;"></div>
+            </div>
+            <div style="font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">You're live!</div>
+            <div style="font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 24px;">Share your link to get your first booking. Drop it in your bio or send it to clients.</div>
+
+            <div style="background: var(--bg-subtle); border-radius: 6px; padding: 12px 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-size: 14px; color: var(--text-body); font-weight: 500;">timetap.it/sofia-coaching</span>
+              <span style="font-size: 14px; color: var(--primary); font-weight: 600;">Copy</span>
+            </div>
+
+            <div class="btn-primary" style="margin-bottom: 12px;">Share your link</div>
+          </div>
+
+          <div style="height: 80px;"></div>
+        </div>
+        <div class="bottom-nav">
+          <div class="bottom-nav-item active"><div class="bottom-nav-icon"></div>Home</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Schedule</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Clients</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Packages</div>
+          <div class="bottom-nav-item"><div class="bottom-nav-icon"></div>Settings</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIRECTION E: Public Host Page -->
+<section id="d5" class="direction">
+  <div class="direction-header">
+    <h2>E: Public Host Page — Customer-Facing</h2>
+    <p>This is what customers see at timetap.it/{slug}. Two variations: minimal (Calendly-like) and warmer (more personality, coach-forward). Both centered, max-width 640px.</p>
+  </div>
+  <div class="mockup-grid">
+    <div>
+      <div class="mockup-label">Minimal — Package Focus</div>
+      <div class="phone-frame">
+        <div class="status-bar"><span>9:41</span><span></span></div>
+        <div style="padding: 24px 16px;">
+          <!-- Host profile -->
+          <div style="text-align: center; margin-bottom: 24px;">
+            <div class="avatar" style="width: 64px; height: 64px; font-size: 24px; margin: 0 auto 12px;">SC</div>
+            <div style="font-size: 20px; font-weight: 700; color: var(--text-primary);">Sofia Coaching</div>
+            <div style="font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin-top: 8px;">Life coach helping professionals find clarity and build confidence. Based in Rome.</div>
+          </div>
+
+          <!-- Packages -->
+          <div class="card" style="margin-bottom: 12px; cursor: pointer;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+              <div>
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Free Intro Call</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">1 session · 30 min</div>
+              </div>
+              <div style="font-size: 16px; font-weight: 700; color: var(--success);">Free</div>
+            </div>
+            <div class="btn-outline" style="padding: 10px; font-size: 14px;">Book free session</div>
+          </div>
+
+          <div class="card" style="margin-bottom: 12px; cursor: pointer;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+              <div>
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Growth Path — 10 Sessions</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">10 sessions · 60 min each</div>
+              </div>
+              <div style="font-size: 16px; font-weight: 700; color: var(--text-primary);">€800</div>
+            </div>
+            <div class="btn-primary" style="padding: 10px; font-size: 14px;">Buy package</div>
+          </div>
+
+          <div class="card" style="margin-bottom: 12px; cursor: pointer;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+              <div>
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Quick Check-in — 3 Sessions</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">3 sessions · 60 min each</div>
+              </div>
+              <div style="font-size: 16px; font-weight: 700; color: var(--text-primary);">€270</div>
+            </div>
+            <div class="btn-primary" style="padding: 10px; font-size: 14px;">Buy package</div>
+          </div>
+
+          <!-- Footer -->
+          <div style="text-align: center; margin-top: 32px; font-size: 12px; color: var(--text-muted);">
+            Powered by <span style="font-weight: 600;">TimeTap</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="mockup-label">Warm — Coach Forward</div>
+      <div class="phone-frame">
+        <div class="status-bar"><span>9:41</span><span></span></div>
+        <!-- Gradient hero -->
+        <div style="background: var(--gradient); padding: 32px 16px; text-align: center; color: white;">
+          <div class="avatar" style="width: 72px; height: 72px; font-size: 28px; margin: 0 auto 12px; background: rgba(255,255,255,0.25); border: 2px solid white;">SC</div>
+          <div style="font-size: 22px; font-weight: 700;">Sofia Coaching</div>
+          <div style="font-size: 14px; opacity: 0.9; margin-top: 8px; line-height: 1.5;">Life coach helping professionals find clarity and build confidence.</div>
+        </div>
+
+        <div style="padding: 16px; margin-top: -8px;">
+          <!-- Free intro prominent -->
+          <div style="background: var(--surface); border-radius: 6px; border: 2px solid var(--primary); padding: 16px; margin-bottom: 12px; text-align: center;">
+            <div style="font-size: 14px; color: var(--primary); font-weight: 600; margin-bottom: 4px;">Start here</div>
+            <div style="font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Free Intro Call</div>
+            <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">30 minutes · No commitment</div>
+            <div class="btn-primary" style="padding: 12px; font-size: 16px;">Book free session</div>
+          </div>
+
+          <div style="font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 16px 0 8px; text-align: center;">Session packages</div>
+
+          <div class="card" style="margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Growth Path</div>
+                <div style="font-size: 13px; color: var(--text-secondary);">10 sessions · 60 min</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 18px; font-weight: 700; color: var(--text-primary);">€800</div>
+                <div style="font-size: 11px; color: var(--text-muted);">€80/session</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Quick Check-in</div>
+                <div style="font-size: 13px; color: var(--text-secondary);">3 sessions · 60 min</div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 18px; font-weight: 700; color: var(--text-primary);">€270</div>
+                <div style="font-size: 11px; color: var(--text-muted);">€90/session</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-top: 24px; font-size: 12px; color: var(--text-muted);">
+            Powered by <span style="font-weight: 600;">TimeTap</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIRECTION F: Customer Workspace -->
+<section id="d6" class="direction">
+  <div class="direction-header">
+    <h2>F: Customer Workspace — Magic Link Experience</h2>
+    <p>What customers see after opening their magic link. Credits visible, booking is two taps. Minimal chrome, personal feel — "my portal to my coach."</p>
+  </div>
+  <div class="mockup-grid">
+    <div>
+      <div class="mockup-label">Workspace — Credits Available</div>
+      <div class="phone-frame">
+        <div class="status-bar"><span>9:41</span><span></span></div>
+        <div style="padding: 16px;">
+          <!-- Host context -->
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
+            <div class="avatar" style="width: 48px; height: 48px; font-size: 18px;">SC</div>
+            <div>
+              <div style="font-size: 18px; font-weight: 700; color: var(--text-primary);">Sofia Coaching</div>
+              <div style="font-size: 14px; color: var(--text-secondary);">Growth Path</div>
+            </div>
+          </div>
+
+          <!-- Credit balance - prominent -->
+          <div style="background: var(--gradient); border-radius: 12px; padding: 24px; color: white; text-align: center; margin-bottom: 20px;">
+            <div style="font-size: 14px; opacity: 0.85; margin-bottom: 4px;">Your credits</div>
+            <div style="font-size: 48px; font-weight: 700; line-height: 1;">8</div>
+            <div style="font-size: 14px; opacity: 0.85; margin-top: 4px;">sessions available</div>
+          </div>
+
+          <div class="btn-primary" style="margin-bottom: 12px;">Book a session</div>
+
+          <!-- Upcoming sessions -->
+          <div style="font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 20px 0 8px;">Upcoming</div>
+
+          <div class="card" style="margin-bottom: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Friday, Feb 14</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">10:00 — 11:00</div>
+              </div>
+              <div style="font-size: 14px; color: var(--primary); font-weight: 500;">Reschedule</div>
+            </div>
+          </div>
+
+          <!-- Past sessions -->
+          <div style="font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 20px 0 8px;">Past sessions</div>
+
+          <div style="padding: 8px 0; border-bottom: 1px solid var(--divider);">
+            <div style="display: flex; justify-content: space-between;">
+              <span style="font-size: 14px; color: var(--text-secondary);">Wed, Feb 12</span>
+              <span style="font-size: 14px; color: var(--text-muted);">Completed</span>
+            </div>
+          </div>
+          <div style="padding: 8px 0; border-bottom: 1px solid var(--divider);">
+            <div style="display: flex; justify-content: space-between;">
+              <span style="font-size: 14px; color: var(--text-secondary);">Mon, Feb 10</span>
+              <span style="font-size: 14px; color: var(--text-muted);">Completed</span>
+            </div>
+          </div>
+
+          <!-- Re-buy -->
+          <div style="margin-top: 24px; text-align: center;">
+            <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 8px;">Need more sessions?</div>
+            <div class="btn-outline" style="font-size: 14px; padding: 10px;">View packages</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="mockup-label">Booking — Slot Selection</div>
+      <div class="phone-frame">
+        <div class="status-bar"><span>9:41</span><span></span></div>
+        <div style="padding: 16px;">
+          <div style="font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Book a session</div>
+          <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px;">1 credit will be used</div>
+
+          <!-- Day headers - horizontal scroll -->
+          <div style="display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto;">
+            <div style="background: var(--primary); color: white; padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 500; white-space: nowrap;">Thu 13</div>
+            <div style="background: var(--surface); border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; font-size: 14px; color: var(--text-body); white-space: nowrap;">Fri 14</div>
+            <div style="background: var(--surface); border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; font-size: 14px; color: var(--text-body); white-space: nowrap;">Sat 15</div>
+            <div style="background: var(--surface); border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; font-size: 14px; color: var(--text-body); white-space: nowrap;">Mon 17</div>
+          </div>
+
+          <!-- Vertical time slots -->
+          <div style="font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px;">Thursday, Feb 13</div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; font-size: 16px; font-weight: 500; color: var(--text-primary); text-align: center; cursor: pointer;">9:00</div>
+            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; font-size: 16px; font-weight: 500; color: var(--text-primary); text-align: center; cursor: pointer;">10:00</div>
+            <div style="background: var(--primary-light); border: 2px solid var(--primary); border-radius: 6px; padding: 14px 16px; font-size: 16px; font-weight: 600; color: var(--primary); text-align: center; cursor: pointer;">11:00 ✓</div>
+            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; font-size: 16px; font-weight: 500; color: var(--text-primary); text-align: center; cursor: pointer;">14:00</div>
+            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; font-size: 16px; font-weight: 500; color: var(--text-primary); text-align: center; cursor: pointer;">15:00</div>
+            <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; font-size: 16px; font-weight: 500; color: var(--text-primary); text-align: center; cursor: pointer;">16:00</div>
+          </div>
+
+          <div style="height: 16px;"></div>
+          <div class="btn-primary">Confirm booking — Thu Feb 13, 11:00</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIRECTION G: Desktop Dashboard -->
+<section id="d7" class="direction">
+  <div class="direction-header">
+    <h2>G: Desktop — Host Dashboard with Sidebar</h2>
+    <p>Wide desktop layout with persistent sidebar navigation. Content area fills remaining space. Same information as mobile, different structure.</p>
+  </div>
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <div class="mockup-label">Desktop Dashboard — Home</div>
+    <div class="desktop-frame">
+      <div style="display: flex; min-height: 600px;">
+        <!-- Sidebar -->
+        <div style="width: 240px; background: var(--surface); border-right: 1px solid var(--divider); padding: 24px 16px; flex-shrink: 0;">
+          <!-- Logo -->
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 32px;">
+            <div style="width: 32px; height: 32px; background: var(--gradient); border-radius: 6px;"></div>
+            <span style="font-size: 18px; font-weight: 600; color: var(--text-primary);">TimeTap</span>
+          </div>
+
+          <!-- Nav items -->
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <div style="padding: 10px 12px; border-radius: 6px; background: var(--primary-light); color: var(--primary); font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 8px;">
+              <div style="width: 18px; height: 18px; background: var(--primary); border-radius: 3px; opacity: 0.3;"></div>Home
+            </div>
+            <div style="padding: 10px 12px; border-radius: 6px; color: var(--text-secondary); font-size: 14px; display: flex; align-items: center; gap: 8px;">
+              <div style="width: 18px; height: 18px; background: var(--text-disabled); border-radius: 3px; opacity: 0.3;"></div>Schedule
+            </div>
+            <div style="padding: 10px 12px; border-radius: 6px; color: var(--text-secondary); font-size: 14px; display: flex; align-items: center; gap: 8px;">
+              <div style="width: 18px; height: 18px; background: var(--text-disabled); border-radius: 3px; opacity: 0.3;"></div>Clients
+            </div>
+            <div style="padding: 10px 12px; border-radius: 6px; color: var(--text-secondary); font-size: 14px; display: flex; align-items: center; gap: 8px;">
+              <div style="width: 18px; height: 18px; background: var(--text-disabled); border-radius: 3px; opacity: 0.3;"></div>Packages
+            </div>
+            <div style="padding: 10px 12px; border-radius: 6px; color: var(--text-secondary); font-size: 14px; display: flex; align-items: center; gap: 8px;">
+              <div style="width: 18px; height: 18px; background: var(--text-disabled); border-radius: 3px; opacity: 0.3;"></div>Settings
+            </div>
+          </div>
+
+          <!-- Bottom -->
+          <div style="margin-top: auto; padding-top: 32px;">
+            <div style="background: var(--bg-subtle); border-radius: 6px; padding: 12px; font-size: 12px; color: var(--text-muted);">
+              <div style="font-weight: 600; color: var(--text-body); margin-bottom: 4px;">Your link</div>
+              <div>timetap.it/sofia-coaching</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div style="flex: 1; background: var(--bg-page); padding: 32px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <div>
+              <div style="font-size: 24px; font-weight: 700; color: var(--text-primary);">Good morning, Sofia</div>
+              <div style="font-size: 14px; color: var(--text-muted);">Wednesday, February 12, 2026</div>
+            </div>
+            <div class="avatar" style="width: 36px; height: 36px; font-size: 14px;">SC</div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+            <!-- Today's sessions -->
+            <div>
+              <div style="font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Today — 4 sessions</div>
+
+              <div class="card" style="margin-bottom: 8px; border-left: 3px solid var(--primary);">
+                <div style="display: flex; justify-content: space-between;">
+                  <div>
+                    <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Marco R.</div>
+                    <div style="font-size: 14px; color: var(--text-secondary);">Growth Path</div>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 16px; font-weight: 600;">10:00</div>
+                    <div style="font-size: 12px; color: var(--primary);">in 25 min</div>
+                  </div>
+                </div>
+              </div>
+              <div class="card" style="margin-bottom: 8px;">
+                <div style="display: flex; justify-content: space-between;">
+                  <div>
+                    <div style="font-size: 14px; font-weight: 500; color: var(--text-primary);">Anna L.</div>
+                    <div style="font-size: 13px; color: var(--text-secondary);">Growth Path</div>
+                  </div>
+                  <div style="font-size: 14px; font-weight: 500;">11:30</div>
+                </div>
+              </div>
+              <div class="card" style="margin-bottom: 8px;">
+                <div style="display: flex; justify-content: space-between;">
+                  <div>
+                    <div style="font-size: 14px; font-weight: 500; color: var(--text-primary);">Giulia M.</div>
+                    <div style="font-size: 13px; color: var(--text-secondary);">Free Intro</div>
+                  </div>
+                  <div style="font-size: 14px; font-weight: 500;">14:00</div>
+                </div>
+              </div>
+              <div class="card" style="margin-bottom: 8px;">
+                <div style="display: flex; justify-content: space-between;">
+                  <div>
+                    <div style="font-size: 14px; font-weight: 500; color: var(--text-primary);">Luca T.</div>
+                    <div style="font-size: 13px; color: var(--text-secondary);">Growth Path</div>
+                  </div>
+                  <div style="font-size: 14px; font-weight: 500;">16:00</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right column -->
+            <div>
+              <div style="font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Activity</div>
+
+              <div class="card" style="margin-bottom: 8px;">
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--success);"></div>
+                  <div>
+                    <div style="font-size: 14px;">Lucia P. purchased <strong>Growth Path</strong></div>
+                    <div style="font-size: 12px; color: var(--text-muted);">2 hours ago</div>
+                  </div>
+                </div>
+              </div>
+              <div class="card" style="margin-bottom: 8px;">
+                <div style="display: flex; gap: 8px; align-items: center;">
+                  <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--primary);"></div>
+                  <div>
+                    <div style="font-size: 14px;">New free intro from <strong>Paolo V.</strong></div>
+                    <div style="font-size: 12px; color: var(--text-muted);">Yesterday</div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin: 16px 0 12px;">Needs attention</div>
+
+              <div class="card" style="border-left: 3px solid var(--warning);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div style="font-size: 14px;">Anna L. — 1 credit left</div>
+                  <span class="tag tag-warning">Low</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIRECTION H: Onboarding -->
+<section id="d8" class="direction">
+  <div class="direction-header">
+    <h2>H: Onboarding — Host Setup Flow</h2>
+    <p>Linear 4-step flow. Centered, narrow column (480px). Each step is one decision. Progress bar at top. Quick wins at every step.</p>
+  </div>
+  <div class="mockup-grid">
+    <div>
+      <div class="mockup-label">Step 1 — Profile Setup</div>
+      <div class="phone-frame">
+        <div class="status-bar"><span>9:41</span><span></span></div>
+        <div style="padding: 16px;">
+          <!-- Progress -->
+          <div style="display: flex; gap: 4px; margin-bottom: 24px;">
+            <div style="flex: 1; height: 4px; background: var(--gradient); border-radius: 2px;"></div>
+            <div style="flex: 1; height: 4px; background: var(--divider); border-radius: 2px;"></div>
+            <div style="flex: 1; height: 4px; background: var(--divider); border-radius: 2px;"></div>
+            <div style="flex: 1; height: 4px; background: var(--divider); border-radius: 2px;"></div>
+          </div>
+
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Step 1 of 4</div>
+          <div style="font-size: 24px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Set up your profile</div>
+          <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 24px;">This is what your clients will see on your public page.</div>
+
+          <!-- Form -->
+          <div style="margin-bottom: 16px;">
+            <label style="font-size: 14px; font-weight: 500; color: var(--text-body); display: block; margin-bottom: 6px;">Display name</label>
+            <div style="border: 1px solid var(--border); border-radius: 6px; padding: 12px 16px; font-size: 16px; color: var(--text-primary);">Sofia Coaching</div>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <label style="font-size: 14px; font-weight: 500; color: var(--text-body); display: block; margin-bottom: 6px;">About you</label>
+            <div style="border: 1px solid var(--border); border-radius: 6px; padding: 12px 16px; font-size: 16px; color: var(--text-muted); min-height: 80px;">Tell your clients about yourself...</div>
+          </div>
+
+          <div style="margin-bottom: 24px;">
+            <label style="font-size: 14px; font-weight: 500; color: var(--text-body); display: block; margin-bottom: 6px;">Your link</label>
+            <div style="display: flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden;">
+              <div style="padding: 12px; background: var(--bg-subtle); font-size: 14px; color: var(--text-muted); border-right: 1px solid var(--border);">timetap.it/</div>
+              <div style="padding: 12px 16px; font-size: 16px; color: var(--text-primary); flex: 1;">sofia-coaching</div>
+            </div>
+            <div style="font-size: 12px; color: var(--success); margin-top: 4px;">Available!</div>
+          </div>
+
+          <div class="btn-primary">Continue</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="mockup-label">Step 4 — First Package + You're Live!</div>
+      <div class="phone-frame">
+        <div class="status-bar"><span>9:41</span><span></span></div>
+        <div style="padding: 16px;">
+          <!-- Progress -->
+          <div style="display: flex; gap: 4px; margin-bottom: 24px;">
+            <div style="flex: 1; height: 4px; background: var(--gradient); border-radius: 2px;"></div>
+            <div style="flex: 1; height: 4px; background: var(--gradient); border-radius: 2px;"></div>
+            <div style="flex: 1; height: 4px; background: var(--gradient); border-radius: 2px;"></div>
+            <div style="flex: 1; height: 4px; background: var(--gradient); border-radius: 2px;"></div>
+          </div>
+
+          <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 4px;">Step 4 of 4</div>
+          <div style="font-size: 24px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Create your first package</div>
+          <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;">Start with a free intro call to attract new clients.</div>
+
+          <!-- Quick create -->
+          <div style="background: var(--primary-light); border: 1px solid var(--primary); border-radius: 6px; padding: 16px; margin-bottom: 16px; cursor: pointer;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-size: 16px; font-weight: 600; color: var(--text-primary);">Free Intro Call</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">1 session · 30 min · Free</div>
+              </div>
+              <div style="width: 24px; height: 24px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; font-size: 14px;">✓</div>
+            </div>
+          </div>
+
+          <div style="text-align: center; font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">— or —</div>
+
+          <div style="border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin-bottom: 24px; cursor: pointer; text-align: center;">
+            <div style="font-size: 14px; color: var(--text-secondary);">Create a custom package</div>
+          </div>
+
+          <div class="btn-primary" style="margin-bottom: 0;">Finish setup</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+function showDirection(id) {
+  document.querySelectorAll('.direction').forEach(d => d.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+Goals and Background Context
+Goals
+
+Deliver a tiny, lovable MVP that solves the core pain: selling and consuming multi-session packages with automatic session-credit tracking
+Provide a delightful, fast, and simple UX from day zero (frictionless checkout → immediate scheduling → clear remaining-session visibility)
+Reduce administrative time by replacing spreadsheets and manual link juggling with a single flow
+Ship quickly with a super small initial scope that can expand after early validation
+
+Background Context
+Service providers who sell sessions in packages (life coaches, business coaches, personal trainers, gyms, tutors, consultants) currently lack a simple all-in-one solution. These providers sell multi-session packages (e.g., 10 PT sessions, 5 coaching calls) but have no way to seamlessly handle purchase → credit assignment → booking with credit consumption.
+Calendly is incompatible with packages and lacks any credit-tracking mechanism. This forces providers to stitch together Stripe/PayPal + Calendly + spreadsheets, causing friction, revenue leakage, and 3–5 hours/week of administrative overhead.
+TimeTap is the simplest possible credit-based booking system: think "Calendly but you pay with credits instead of booking for free." Hosts define packages (e.g., "10 Sessions - €500"), customers buy them and receive credits, then book appointments by spending credits. The host configures whether sessions include a Google Meet link (virtual) or a physical location address.
+The infrastructure is completely use-case agnostic—the data model uses neutral terminology (host, customer, session, package, credit) rather than coach-specific language, making it equally suitable for fitness, coaching, tutoring, consulting, or any other session-based service. TimeTap will focus narrowly on the highest-impact gap: end-to-end package purchase with session-credit tracking and immediate booking in a UX-optimized flow. Broader capabilities (subscriptions, deep CRM, analytics) will follow only after MVP validation.
