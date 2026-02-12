@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Host {
+  id                   String    @id @default(uuid()) @db.Uuid
+  email                String    @unique
+  name                 String
+  slug                 String?   @unique
+  description          String?
+  avatarUrl            String?   @map("avatar_url")
+  timezone             String?
+  googleRefreshToken   String?   @map("google_refresh_token")
+  stripeAccountId      String?   @map("stripe_account_id")
+  subscriptionId       String?   @map("subscription_id")
+  subscriptionStatus   String?   @map("subscription_status")
+  trialEndsAt          DateTime? @map("trial_ends_at")
+  bookableHours        Json?     @map("bookable_hours")
+  onboardingCompleted  Boolean   @default(false) @map("onboarding_completed")
+  createdAt            DateTime  @default(now()) @map("created_at")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
+
+  @@map("hosts")
+}

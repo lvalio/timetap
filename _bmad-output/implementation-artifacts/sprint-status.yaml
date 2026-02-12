@@ -1,0 +1,87 @@
+# generated: 2026-02-12
+# project: timetap
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog -> in-progress: Automatically when first story is created (via create-story)
+#   - in-progress -> done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: 2026-02-12
+project: timetap
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+
+development_status:
+  # Epic 1: Project Foundation & Host Authentication
+  epic-1: in-progress
+  1-1-project-initialization-and-database-foundation: review
+  1-2-host-google-oauth-sign-in-and-sign-out: backlog
+  1-3-route-protection-and-dashboard-shell: backlog
+  epic-1-retrospective: optional
+
+  # Epic 2: Host Onboarding & Setup
+  epic-2: backlog
+  2-1-onboarding-flow-and-profile-setup: backlog
+  2-2-stripe-connect-integration: backlog
+  2-3-google-calendar-connection-and-bookable-hours: backlog
+  2-4-package-creation-and-management: backlog
+  2-5-free-trial-activation-and-onboarding-completion: backlog
+  epic-2-retrospective: optional
+
+  # Epic 3: Public Host Page & Free Session Booking
+  epic-3: backlog
+  3-1-public-host-page: backlog
+  3-2-availability-engine: backlog
+  3-3-free-session-booking-flow: backlog
+  3-4-google-calendar-sync-and-meet-link-generation: backlog
+  3-5-booking-emails-and-magic-link: backlog
+  epic-3-retrospective: optional
+
+  # Epic 4: Package Purchase & Conversion Engine
+  epic-4: backlog
+  4-1-paid-package-purchase-via-stripe-checkout: backlog
+  4-2-automated-post-free-session-upsell-email: backlog
+  epic-4-retrospective: optional
+
+  # Epic 5: Customer Workspace & Session Management
+  epic-5: backlog
+  5-1-customer-workspace-and-magic-link-access: backlog
+  5-2-customer-session-booking-credit-based: backlog
+  5-3-session-rescheduling: backlog
+  5-4-package-re-purchase-from-workspace: backlog
+  epic-5-retrospective: optional
+
+  # Epic 6: Host Dashboard & Client Management
+  epic-6: backlog
+  6-1-host-schedule-view: backlog
+  6-2-client-list-and-detail-view: backlog
+  6-3-credit-management-and-session-cancellation: backlog
+  epic-6-retrospective: optional
