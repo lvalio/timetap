@@ -43,8 +43,8 @@ development_status:
   # Epic 1: Project Foundation & Host Authentication
   epic-1: in-progress
   1-1-project-initialization-and-database-foundation: review
-  1-2-host-google-oauth-sign-in-and-sign-out: backlog
-  1-3-route-protection-and-dashboard-shell: backlog
+  1-2-host-google-oauth-sign-in-and-sign-out: review
+  1-3-route-protection-and-dashboard-shell: review
   epic-1-retrospective: optional
 
   # Epic 2: Host Onboarding & Setup

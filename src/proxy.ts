@@ -1,8 +1,12 @@
-// Next.js 16: proxy.ts replaces middleware.ts
-// Route protection zones:
-// - Public: /, /[slug] — no auth required
-// - Host: /dashboard/* — requires Google OAuth session
-// - Customer: /workspace/* — requires magic link session
-// - API/Webhooks: /api/webhooks/* — signature verification, no Supabase auth
+import { type NextRequest } from "next/server"
+import { updateSession } from "@/lib/supabase/middleware"
 
-export { proxy } from "@/lib/supabase/middleware"
+export async function proxy(request: NextRequest) {
+  return await updateSession(request)
+}
+
+export const config = {
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+  ],
+}
