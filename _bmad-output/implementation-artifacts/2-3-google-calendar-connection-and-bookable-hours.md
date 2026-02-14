@@ -1,6 +1,6 @@
 # Story 2.3: Google Calendar Connection & Bookable Hours (Step 3/5)
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
