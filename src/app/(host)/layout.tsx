@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation"
+import { headers } from "next/headers"
 import { createClient } from "@/lib/supabase/server"
 import { hostService } from "@/services/host.service"
 import { SidebarNav } from "@/components/shared/sidebar-nav"
@@ -21,6 +22,20 @@ export default async function HostLayout({
   const host = await hostService.findByAuthId(user.id)
   if (!host) {
     redirect("/auth/login")
+  }
+
+  const headersList = await headers()
+  const pathname = headersList.get("x-pathname") ?? ""
+  const isOnboarding = pathname.startsWith("/onboarding")
+
+  // Redirect to onboarding if not completed and not already on onboarding
+  if (!host.onboardingCompleted && !isOnboarding) {
+    redirect("/onboarding")
+  }
+
+  // Don't render sidebar/tab bar for onboarding route
+  if (isOnboarding) {
+    return <>{children}</>
   }
 
   return (

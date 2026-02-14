@@ -48,8 +48,8 @@ development_status:
   epic-1-retrospective: optional
 
   # Epic 2: Host Onboarding & Setup
-  epic-2: backlog
-  2-1-onboarding-flow-and-profile-setup: backlog
+  epic-2: in-progress
+  2-1-onboarding-flow-and-profile-setup: review
   2-2-stripe-connect-integration: backlog
   2-3-google-calendar-connection-and-bookable-hours: backlog
   2-4-package-creation-and-management: backlog

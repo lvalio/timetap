@@ -45,5 +45,8 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
+  // Pass pathname to layouts via header for conditional rendering
+  supabaseResponse.headers.set("x-pathname", pathname)
+
   return supabaseResponse
 }
