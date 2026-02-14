@@ -52,7 +52,7 @@ development_status:
   2-1-onboarding-flow-and-profile-setup: done
   2-2-stripe-connect-integration: done
   2-3-google-calendar-connection-and-bookable-hours: review
-  2-4-package-creation-and-management: backlog
+  2-4-package-creation-and-management: review
   2-5-free-trial-activation-and-onboarding-completion: backlog
   epic-2-retrospective: optional
 

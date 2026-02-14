@@ -6,6 +6,7 @@ import { OnboardingStepper } from "@/components/onboarding/onboarding-stepper"
 import { ProfileForm } from "@/components/onboarding/profile-form"
 import { StripeConnectStep } from "@/components/onboarding/stripe-connect-step"
 import { GoogleCalendarStep } from "@/components/onboarding/google-calendar-step"
+import { PackageStep } from "@/components/onboarding/package-step"
 import { saveProfile } from "./actions"
 import type { UpdateProfileInput } from "@/lib/validations/host"
 
@@ -36,7 +37,7 @@ const STEP_TITLES: Record<number, { title: string; description: string }> = {
   },
   4: {
     title: "Create Your First Package",
-    description: "Coming in Story 2.4",
+    description: "Set up your packages so clients can book and buy.",
   },
   5: {
     title: "Start Free Trial",
@@ -174,7 +175,14 @@ export default function OnboardingPage() {
           />
         )}
 
-        {currentStep >= 4 && currentStep <= 5 && (
+        {currentStep === 4 && hostData && (
+          <PackageStep
+            hostId={hostData.id}
+            onComplete={() => setCurrentStep(5)}
+          />
+        )}
+
+        {currentStep === 5 && (
           <div className="flex flex-col items-center py-12 text-center">
             <p className="text-sm text-tt-text-muted">
               {stepInfo.description}

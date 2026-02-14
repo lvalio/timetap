@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { hostService } from "@/services/host.service"
+import { packageService } from "@/services/package.service"
 
 export async function GET() {
   const supabase = await createClient()
@@ -17,6 +18,8 @@ export async function GET() {
     return NextResponse.json({ error: "Host not found" }, { status: 404 })
   }
 
+  const packages = await packageService.listByHostId(user.id)
+
   return NextResponse.json({
     id: host.id,
     name: host.name,
@@ -26,5 +29,6 @@ export async function GET() {
     bookableHours: host.bookableHours,
     stripeAccountId: host.stripeAccountId,
     onboardingCompleted: host.onboardingCompleted,
+    packages,
   })
 }

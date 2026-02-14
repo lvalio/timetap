@@ -60,3 +60,19 @@ export default function LoginPage() {
   )
 }
 ```
+
+---
+
+## Fix #3 — Prisma client not generated on Vercel
+
+**Date:** 2026-02-14
+**File:** `package.json`
+**Error:**
+
+```
+Module not found: Can't resolve '@/generated/prisma/client'
+```
+
+**Root cause:** The `build` script was just `next build` — no `prisma generate` step. The generated client exists locally but not on Vercel's fresh clone, so the import fails during Turbopack build.
+
+**Fix:** Added a `postinstall` script (`"postinstall": "prisma generate"`) which Vercel runs automatically after `pnpm install`, ensuring the client is generated before the build.

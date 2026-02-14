@@ -32,6 +32,7 @@ vi.mock("./actions", () => ({
   saveProfile: vi.fn(),
   checkSlugAvailability: vi.fn(),
   saveBookableHours: vi.fn(),
+  createPackage: vi.fn(),
 }))
 
 describe("OnboardingPage", () => {

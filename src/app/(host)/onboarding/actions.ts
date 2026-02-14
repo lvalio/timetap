@@ -6,9 +6,11 @@ import {
   bookableHoursSchema,
   type BookableHoursInput,
 } from "@/lib/validations/host"
+import { createPackageSchema } from "@/lib/validations/package"
 import { hostService } from "@/services/host.service"
+import { packageService } from "@/services/package.service"
 import type { ActionResult } from "@/types/actions"
-import type { Host } from "@/generated/prisma/client"
+import type { Host, Package } from "@/generated/prisma/client"
 
 export async function checkSlugAvailability(
   slug: string,
@@ -134,6 +136,46 @@ export async function saveBookableHours(
       error: {
         code: "INTERNAL_ERROR",
         message: "Could not save bookable hours. Please try again.",
+      },
+    }
+  }
+}
+
+export async function createPackage(
+  input: { name: string; sessionCount: number; priceInCents: number }
+): Promise<ActionResult<Package>> {
+  const parsed = createPackageSchema.safeParse(input)
+  if (!parsed.success) {
+    return {
+      success: false,
+      error: {
+        code: "VALIDATION_ERROR",
+        message: parsed.error.issues[0].message,
+      },
+    }
+  }
+
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) {
+    return {
+      success: false,
+      error: { code: "UNAUTHORIZED", message: "Not authenticated" },
+    }
+  }
+
+  try {
+    const pkg = await packageService.create(user.id, parsed.data)
+    return { success: true, data: pkg }
+  } catch (error) {
+    console.error("createPackage failed:", error)
+    return {
+      success: false,
+      error: {
+        code: "INTERNAL_ERROR",
+        message: "Could not create package. Please try again.",
       },
     }
   }
