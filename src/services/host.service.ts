@@ -105,6 +105,19 @@ export const hostService = {
     })
   },
 
+  async findBySlugPublic(slug: string) {
+    return prisma.host.findFirst({
+      where: { slug, onboardingCompleted: true },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        description: true,
+        avatarUrl: true,
+      },
+    })
+  },
+
   async findBySubscriptionId(subscriptionId: string) {
     return prisma.host.findFirst({
       where: { subscriptionId },

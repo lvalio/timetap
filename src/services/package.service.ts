@@ -42,6 +42,20 @@ export const packageService = {
     })
   },
 
+  async findActiveByHostId(hostId: string) {
+    return prisma.package.findMany({
+      where: { hostId, isActive: true },
+      select: {
+        id: true,
+        name: true,
+        sessionCount: true,
+        priceInCents: true,
+        isFreeIntro: true,
+      },
+      orderBy: [{ isFreeIntro: "desc" }, { createdAt: "asc" }],
+    })
+  },
+
   async countByHostId(hostId: string) {
     return prisma.package.count({
       where: { hostId },

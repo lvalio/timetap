@@ -171,6 +171,39 @@ describe("packageService", () => {
     })
   })
 
+  describe("findActiveByHostId", () => {
+    it("returns active packages with free intro first, then by createdAt", async () => {
+      const mockPkgs = [
+        { id: "pkg-free", name: "Free Intro", sessionCount: 1, priceInCents: 0, isFreeIntro: true },
+        { id: "pkg-paid", name: "5 Sessions", sessionCount: 5, priceInCents: 40000, isFreeIntro: false },
+      ]
+      mockFindMany.mockResolvedValue(mockPkgs)
+
+      const result = await packageService.findActiveByHostId("host-1")
+
+      expect(mockFindMany).toHaveBeenCalledWith({
+        where: { hostId: "host-1", isActive: true },
+        select: {
+          id: true,
+          name: true,
+          sessionCount: true,
+          priceInCents: true,
+          isFreeIntro: true,
+        },
+        orderBy: [{ isFreeIntro: "desc" }, { createdAt: "asc" }],
+      })
+      expect(result).toEqual(mockPkgs)
+    })
+
+    it("returns empty array for host with no active packages", async () => {
+      mockFindMany.mockResolvedValue([])
+
+      const result = await packageService.findActiveByHostId("host-no-pkgs")
+
+      expect(result).toEqual([])
+    })
+  })
+
   describe("countByHostId", () => {
     it("returns count of packages for host", async () => {
       mockCount.mockResolvedValue(3)

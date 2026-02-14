@@ -1,6 +1,6 @@
 # Story 2.5: Free Trial Activation & Onboarding Completion (Step 5/5)
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 

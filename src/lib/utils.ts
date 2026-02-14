@@ -15,9 +15,14 @@ export function formatDate(date: Date | string, options?: Intl.DateTimeFormatOpt
   })
 }
 
-export function formatCurrency(amount: number, currency = "USD"): string {
-  return new Intl.NumberFormat("en-US", {
+export function formatCurrency(cents: number): string {
+  if (cents === 0) return "Free"
+  const euros = cents / 100
+  const isWhole = cents % 100 === 0
+  return new Intl.NumberFormat("en-IE", {
     style: "currency",
-    currency,
-  }).format(amount / 100)
+    currency: "EUR",
+    minimumFractionDigits: isWhole ? 0 : 2,
+    maximumFractionDigits: 2,
+  }).format(euros)
 }

@@ -142,6 +142,64 @@ describe("hostService", () => {
     })
   })
 
+  describe("findBySlugPublic", () => {
+    it("returns public fields for onboarded host", async () => {
+      mockFindFirst.mockResolvedValue({
+        id: "host-1",
+        name: "Jane Coach",
+        slug: "jane-coach",
+        description: "Life coaching sessions",
+        avatarUrl: "https://example.com/avatar.jpg",
+      })
+
+      const result = await hostService.findBySlugPublic("jane-coach")
+
+      expect(mockFindFirst).toHaveBeenCalledWith({
+        where: { slug: "jane-coach", onboardingCompleted: true },
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          description: true,
+          avatarUrl: true,
+        },
+      })
+      expect(result).toEqual({
+        id: "host-1",
+        name: "Jane Coach",
+        slug: "jane-coach",
+        description: "Life coaching sessions",
+        avatarUrl: "https://example.com/avatar.jpg",
+      })
+    })
+
+    it("returns null for non-existent slug", async () => {
+      mockFindFirst.mockResolvedValue(null)
+
+      const result = await hostService.findBySlugPublic("nonexistent")
+
+      expect(result).toBeNull()
+    })
+
+    it("returns null for non-onboarded host", async () => {
+      mockFindFirst.mockResolvedValue(null)
+
+      const result = await hostService.findBySlugPublic("not-onboarded")
+
+      expect(mockFindFirst).toHaveBeenCalledWith({
+        where: { slug: "not-onboarded", onboardingCompleted: true },
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          description: true,
+          avatarUrl: true,
+        },
+      })
+      expect(result).toBeNull()
+    })
+  })
+
   describe("findBySubscriptionId", () => {
     it("finds host by subscription ID", async () => {
       const mockHost = { id: "host-1", subscriptionId: "sub_123" }

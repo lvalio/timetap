@@ -76,3 +76,39 @@ Module not found: Can't resolve '@/generated/prisma/client'
 **Root cause:** The `build` script was just `next build` — no `prisma generate` step. The generated client exists locally but not on Vercel's fresh clone, so the import fails during Turbopack build.
 
 **Fix:** Added a `postinstall` script (`"postinstall": "prisma generate"`) which Vercel runs automatically after `pnpm install`, ensuring the client is generated before the build.
+
+---
+
+## Fix #4 — `Invoice.subscription` removed in Stripe SDK v20
+
+**Date:** 2026-02-14
+**File:** `src/app/api/webhooks/stripe/route.ts`
+**Error:**
+
+```
+Type error: Property 'subscription' does not exist on type 'Invoice'.
+```
+
+**Root cause:** Stripe SDK v20 (API version 2025+) removed `Invoice.subscription` as a top-level property. The subscription reference now lives under `Invoice.parent.subscription_details.subscription`.
+
+**Fix:** Replaced direct `invoice.subscription` access with optional chaining through the new parent structure:
+
+**Before:**
+```tsx
+const invoice = event.data.object as Stripe.Invoice
+if (invoice.subscription) {
+  const subId =
+    typeof invoice.subscription === "string"
+      ? invoice.subscription
+      : invoice.subscription.id
+```
+
+**After:**
+```tsx
+const invoice = event.data.object as Stripe.Invoice
+const sub = invoice.parent?.subscription_details?.subscription
+if (sub) {
+  const subId = typeof sub === "string" ? sub : sub.id
+```
+
+**Affected consumers:** Stripe webhook handler (`invoice.payment_failed` event)
