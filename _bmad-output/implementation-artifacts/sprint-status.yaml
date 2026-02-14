@@ -51,15 +51,15 @@ development_status:
   epic-2: in-progress
   2-1-onboarding-flow-and-profile-setup: done
   2-2-stripe-connect-integration: done
-  2-3-google-calendar-connection-and-bookable-hours: review
-  2-4-package-creation-and-management: review
-  2-5-free-trial-activation-and-onboarding-completion: review
+  2-3-google-calendar-connection-and-bookable-hours: done
+  2-4-package-creation-and-management: done
+  2-5-free-trial-activation-and-onboarding-completion: done
   epic-2-retrospective: optional
 
   # Epic 3: Public Host Page & Free Session Booking
   epic-3: in-progress
-  3-1-public-host-page: review
-  3-2-availability-engine: backlog
+  3-1-public-host-page: done
+  3-2-availability-engine: review
   3-3-free-session-booking-flow: backlog
   3-4-google-calendar-sync-and-meet-link-generation: backlog
   3-5-booking-emails-and-magic-link: backlog

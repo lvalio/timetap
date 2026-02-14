@@ -25,7 +25,9 @@ model Host {
   createdAt            DateTime  @default(now()) @map("created_at")
   updatedAt            DateTime  @updatedAt @map("updated_at")
 
-  packages Package[]
+  packages  Package[]
+  customers Customer[]
+  bookings  Booking[]
 
   @@map("hosts")
 }
@@ -41,7 +43,43 @@ model Package {
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 
-  host Host @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  host     Host      @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  bookings Booking[]
 
   @@map("packages")
+}
+
+model Customer {
+  id        String   @id @default(uuid()) @db.Uuid
+  email     String
+  name      String?
+  hostId    String   @map("host_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  host     Host      @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  bookings Booking[]
+
+  @@unique([hostId, email])
+  @@map("customers")
+}
+
+model Booking {
+  id            String   @id @default(uuid()) @db.Uuid
+  hostId        String   @map("host_id") @db.Uuid
+  customerId    String   @map("customer_id") @db.Uuid
+  packageId     String   @map("package_id") @db.Uuid
+  startTime     DateTime @map("start_time")
+  endTime       DateTime @map("end_time")
+  status        String   @default("confirmed")
+  googleEventId String?  @map("google_event_id")
+  meetLink      String?  @map("meet_link")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  host     Host     @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  package  Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
+
+  @@map("bookings")
 }
