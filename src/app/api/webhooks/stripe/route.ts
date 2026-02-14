@@ -45,11 +45,9 @@ export async function POST(request: NextRequest) {
     }
     case "invoice.payment_failed": {
       const invoice = event.data.object as Stripe.Invoice
-      if (invoice.subscription) {
-        const subId =
-          typeof invoice.subscription === "string"
-            ? invoice.subscription
-            : invoice.subscription.id
+      const sub = invoice.parent?.subscription_details?.subscription
+      if (sub) {
+        const subId = typeof sub === "string" ? sub : sub.id
         const host = await hostService.findBySubscriptionId(subId)
         if (host) {
           await hostService.updateSubscriptionStatus(host.id, {
