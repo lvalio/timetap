@@ -16,10 +16,35 @@ export const updateProfileSchema = z.object({
     .max(100, "Name must be at most 100 characters"),
   description: z
     .string()
-    .max(500, "Description must be at most 500 characters")
-    .optional()
-    .default(""),
+    .max(500, "Description must be at most 500 characters"),
   slug: slugSchema,
 })
 
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>
+
+const VALID_DAYS = [
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday",
+] as const
+
+const timeRangeSchema = z
+  .object({
+    start: z.string().regex(/^(0[89]|1[0-9]|20):00$/, "Time must be HH:00 format between 08:00 and 20:00"),
+    end: z.string().regex(/^(0[89]|1[0-9]|20):00$/, "Time must be HH:00 format between 08:00 and 20:00"),
+  })
+  .refine((range) => range.start < range.end, {
+    message: "Start time must be before end time",
+  })
+
+export const bookableHoursSchema = z.object(
+  Object.fromEntries(
+    VALID_DAYS.map((day) => [day, z.array(timeRangeSchema)])
+  ) as Record<(typeof VALID_DAYS)[number], z.ZodArray<typeof timeRangeSchema>>
+)
+
+export type BookableHoursInput = z.infer<typeof bookableHoursSchema>

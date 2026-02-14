@@ -64,7 +64,7 @@ Use this as a step-by-step guide to set up all external services before (and dur
 
 ### Pre-launch
 
-- [ ] Create a separate `timetap-prod` Supabase project
+- [x] Create a separate `timetap-prod` Supabase project
 - [ ] Verify RLS policies on all tenant-scoped tables
 
 ---
@@ -75,14 +75,15 @@ Use this as a step-by-step guide to set up all external services before (and dur
 
 ### Setup Steps
 
-- [ ] Create a Stripe account at [stripe.com](https://stripe.com)
-- [ ] In **Developers > API keys** — copy test-mode publishable and secret keys
-- [ ] Enable **Stripe Connect:**
+- [x] Create a Stripe account at [stripe.com](https://stripe.com)
+- [x] In **Developers > API keys** — copy test-mode publishable and secret keys
+- [x] Enable **Stripe Connect:**
   - Go to **Connect > Settings**
   - Choose **Standard** account type
   - Configure branding (name, logo, colors)
-  - Set redirect URI: `http://localhost:3000/api/stripe/connect/callback` (dev)
-- [ ] Set up a **Webhook endpoint:**
+  - Set redirect URI: `
+  ` (dev)
+- [x] Set up a **Webhook endpoint:**
   - URL: `http://localhost:3000/api/webhooks/stripe` (dev — use Stripe CLI for local testing)
   - Events to listen for: `checkout.session.completed`, `invoice.paid`, `invoice.payment_failed`, `customer.subscription.updated`, `customer.subscription.deleted`, `account.updated`
   - Copy the webhook signing secret

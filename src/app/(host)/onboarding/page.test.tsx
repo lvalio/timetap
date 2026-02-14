@@ -15,6 +15,8 @@ const mockHostData = {
   description: "Life coach",
   slug: "sofia",
   stripeAccountId: null,
+  googleRefreshToken: null,
+  bookableHours: null,
 }
 
 vi.stubGlobal(
@@ -29,6 +31,7 @@ vi.stubGlobal(
 vi.mock("./actions", () => ({
   saveProfile: vi.fn(),
   checkSlugAvailability: vi.fn(),
+  saveBookableHours: vi.fn(),
 }))
 
 describe("OnboardingPage", () => {
@@ -107,6 +110,69 @@ describe("OnboardingPage", () => {
     await waitFor(() => {
       expect(
         screen.getByText("Google Calendar & Bookable Hours")
+      ).toBeInTheDocument()
+    })
+  })
+
+  it("shows step 3 with Google Calendar connect when step=3 in query", async () => {
+    mockSearchParams.set("step", "3")
+    render(<OnboardingPage />)
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("heading", { name: "Google Calendar & Bookable Hours" })
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole("button", { name: /connect calendar/i })
+      ).toBeInTheDocument()
+    })
+  })
+
+  it("shows calendar connected and bookable hours when google=connected", async () => {
+    mockSearchParams.set("step", "3")
+    mockSearchParams.set("google", "connected")
+
+    vi.mocked(fetch).mockResolvedValue({
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          ...mockHostData,
+          stripeAccountId: "acct_1ABC",
+          googleRefreshToken: "refresh-token",
+        }),
+    } as Response)
+
+    render(<OnboardingPage />)
+
+    await waitFor(() => {
+      expect(screen.getByText("Calendar connected!")).toBeInTheDocument()
+      expect(screen.getByText("Set your bookable hours")).toBeInTheDocument()
+    })
+  })
+
+  it("shows error on step 3 when error=google_connect_failed", async () => {
+    mockSearchParams.set("step", "3")
+    mockSearchParams.set("error", "google_connect_failed")
+    render(<OnboardingPage />)
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          /Google Calendar connection didn't go through/i
+        )
+      ).toBeInTheDocument()
+    })
+  })
+
+  it("shows step 3 description", async () => {
+    mockSearchParams.set("step", "3")
+    render(<OnboardingPage />)
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          "Connect your Google Calendar and set when you're available."
+        )
       ).toBeInTheDocument()
     })
   })

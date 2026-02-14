@@ -48,6 +48,20 @@ export const hostService = {
     })
   },
 
+  async updateBookableHours(hostId: string, bookableHours: Record<string, { start: string; end: string }[]>) {
+    return prisma.host.update({
+      where: { id: hostId },
+      data: { bookableHours },
+    })
+  },
+
+  async updateGoogleRefreshToken(hostId: string, refreshToken: string) {
+    return prisma.host.update({
+      where: { id: hostId },
+      data: { googleRefreshToken: refreshToken },
+    })
+  },
+
   suggestSlug(slug: string): string {
     const suffix = Math.floor(10 + Math.random() * 90)
     return `${slug}-${suffix}`

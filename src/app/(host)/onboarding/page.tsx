@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation"
 import { OnboardingStepper } from "@/components/onboarding/onboarding-stepper"
 import { ProfileForm } from "@/components/onboarding/profile-form"
 import { StripeConnectStep } from "@/components/onboarding/stripe-connect-step"
+import { GoogleCalendarStep } from "@/components/onboarding/google-calendar-step"
 import { saveProfile } from "./actions"
 import type { UpdateProfileInput } from "@/lib/validations/host"
 
@@ -14,6 +15,8 @@ interface HostData {
   description: string | null
   slug: string | null
   stripeAccountId: string | null
+  googleRefreshToken: string | null
+  bookableHours: Record<string, { start: string; end: string }[]> | null
 }
 
 const STEP_TITLES: Record<number, { title: string; description: string }> = {
@@ -28,7 +31,8 @@ const STEP_TITLES: Record<number, { title: string; description: string }> = {
   },
   3: {
     title: "Google Calendar & Bookable Hours",
-    description: "Coming in Story 2.3",
+    description:
+      "Connect your Google Calendar and set when you're available.",
   },
   4: {
     title: "Create Your First Package",
@@ -47,6 +51,8 @@ export default function OnboardingPage() {
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const [stripeError, setStripeError] = useState<string | null>(null)
+  const [googleError, setGoogleError] = useState<string | null>(null)
+  const [calendarConnected, setCalendarConnected] = useState(false)
 
   const fetchHost = useCallback(async () => {
     const res = await fetch("/api/host/me")
@@ -67,13 +73,13 @@ export default function OnboardingPage() {
   useEffect(() => {
     const step = searchParams.get("step")
     const stripe = searchParams.get("stripe")
+    const google = searchParams.get("google")
     const errorParam = searchParams.get("error")
 
     if (step === "2") {
       setCurrentStep(2)
 
       if (stripe === "connected") {
-        // Re-fetch host data to confirm stripeAccountId is present, then advance
         fetchHost().then((host) => {
           if (host?.stripeAccountId) {
             setCurrentStep(3)
@@ -85,7 +91,30 @@ export default function OnboardingPage() {
         setStripeError("stripe_connect_failed")
       }
     }
+
+    if (step === "3") {
+      setCurrentStep(3)
+
+      if (google === "connected") {
+        fetchHost().then((host) => {
+          if (host?.googleRefreshToken) {
+            setCalendarConnected(true)
+          }
+        })
+      }
+
+      if (errorParam === "google_connect_failed") {
+        setGoogleError("google_connect_failed")
+      }
+    }
   }, [searchParams, fetchHost])
+
+  // Sync calendarConnected with hostData
+  useEffect(() => {
+    if (hostData?.googleRefreshToken) {
+      setCalendarConnected(true)
+    }
+  }, [hostData])
 
   const handleProfileSubmit = async (data: UpdateProfileInput) => {
     setError(null)
@@ -137,7 +166,15 @@ export default function OnboardingPage() {
           <StripeConnectStep error={stripeError} />
         )}
 
-        {currentStep >= 3 && currentStep <= 5 && (
+        {currentStep === 3 && (
+          <GoogleCalendarStep
+            calendarConnected={calendarConnected}
+            error={googleError}
+            onComplete={() => setCurrentStep(4)}
+          />
+        )}
+
+        {currentStep >= 4 && currentStep <= 5 && (
           <div className="flex flex-col items-center py-12 text-center">
             <p className="text-sm text-tt-text-muted">
               {stepInfo.description}

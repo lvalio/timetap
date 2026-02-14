@@ -2,6 +2,18 @@ import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { hostService } from "@/services/host.service"
 import { SettingsForm } from "./settings-form"
+import { BookableHoursEditor } from "./bookable-hours-editor"
+import type { BookableHoursInput } from "@/lib/validations/host"
+
+const DEFAULT_BOOKABLE_HOURS: BookableHoursInput = {
+  monday: [{ start: "09:00", end: "17:00" }],
+  tuesday: [{ start: "09:00", end: "17:00" }],
+  wednesday: [{ start: "09:00", end: "17:00" }],
+  thursday: [{ start: "09:00", end: "17:00" }],
+  friday: [{ start: "09:00", end: "17:00" }],
+  saturday: [],
+  sunday: [],
+}
 
 export default async function SettingsPage() {
   const supabase = await createClient()
@@ -17,6 +29,8 @@ export default async function SettingsPage() {
   if (!host) {
     redirect("/auth/login")
   }
+
+  const bookableHours = (host.bookableHours as BookableHoursInput) ?? DEFAULT_BOOKABLE_HOURS
 
   return (
     <div className="px-6 py-8">
@@ -50,9 +64,12 @@ export default async function SettingsPage() {
               {host.googleRefreshToken ? (
                 <span className="text-sm text-tt-success">Connected</span>
               ) : (
-                <span className="text-sm text-tt-text-muted">
-                  Not connected
-                </span>
+                <a
+                  href="/api/google/connect"
+                  className="text-sm text-tt-text-muted hover:text-tt-primary underline"
+                >
+                  Not connected — Connect
+                </a>
               )}
             </div>
             <div className="flex items-center justify-between">
@@ -68,6 +85,18 @@ export default async function SettingsPage() {
                 </a>
               )}
             </div>
+          </div>
+        </div>
+
+        <div className="mt-8 border-t border-tt-divider pt-6">
+          <h2 className="text-base font-medium text-tt-text-primary">
+            Bookable Hours
+          </h2>
+          <p className="mt-1 text-sm text-tt-text-muted">
+            Set the hours when clients can book sessions with you.
+          </p>
+          <div className="mt-4">
+            <BookableHoursEditor defaultValue={bookableHours} />
           </div>
         </div>
       </div>

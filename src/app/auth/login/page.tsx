@@ -1,9 +1,10 @@
 "use client"
 
+import { Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { signInWithGoogle } from "../actions"
 
-export default function LoginPage() {
+function LoginContent() {
   const searchParams = useSearchParams()
   const hasError = searchParams.get("error") === "auth_failed"
 
@@ -35,5 +36,13 @@ export default function LoginPage() {
         </button>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginContent />
+    </Suspense>
   )
 }

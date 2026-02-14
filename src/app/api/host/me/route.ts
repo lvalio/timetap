@@ -23,6 +23,7 @@ export async function GET() {
     description: host.description,
     slug: host.slug,
     googleRefreshToken: host.googleRefreshToken,
+    bookableHours: host.bookableHours,
     stripeAccountId: host.stripeAccountId,
     onboardingCompleted: host.onboardingCompleted,
   })
