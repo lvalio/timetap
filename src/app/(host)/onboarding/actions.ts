@@ -4,9 +4,11 @@ import { createClient } from "@/lib/supabase/server"
 import {
   updateProfileSchema,
   bookableHoursSchema,
+  activateTrialSchema,
   type BookableHoursInput,
 } from "@/lib/validations/host"
 import { createPackageSchema } from "@/lib/validations/package"
+import { createTrialSubscription } from "@/lib/stripe/billing"
 import { hostService } from "@/services/host.service"
 import { packageService } from "@/services/package.service"
 import type { ActionResult } from "@/types/actions"
@@ -176,6 +178,73 @@ export async function createPackage(
       error: {
         code: "INTERNAL_ERROR",
         message: "Could not create package. Please try again.",
+      },
+    }
+  }
+}
+
+export async function activateTrial(
+  input: { paymentMethodId: string }
+): Promise<ActionResult<{ trialEndsAt: string; slug: string }>> {
+  const parsed = activateTrialSchema.safeParse(input)
+  if (!parsed.success) {
+    return {
+      success: false,
+      error: {
+        code: "VALIDATION_ERROR",
+        message: parsed.error.issues[0].message,
+      },
+    }
+  }
+
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) {
+    return {
+      success: false,
+      error: { code: "UNAUTHORIZED", message: "Not authenticated" },
+    }
+  }
+
+  try {
+    const host = await hostService.findByAuthId(user.id)
+    if (!host) {
+      return {
+        success: false,
+        error: { code: "NOT_FOUND", message: "Host not found" },
+      }
+    }
+
+    const { subscriptionId, trialEnd } = await createTrialSubscription({
+      hostEmail: host.email,
+      hostId: user.id,
+      paymentMethodId: parsed.data.paymentMethodId,
+    })
+
+    await hostService.activateTrial(user.id, {
+      subscriptionId,
+      subscriptionStatus: "trialing",
+      trialEndsAt: trialEnd,
+    })
+
+    await hostService.completeOnboarding(user.id)
+
+    return {
+      success: true,
+      data: {
+        trialEndsAt: trialEnd.toISOString(),
+        slug: host.slug ?? "",
+      },
+    }
+  } catch (error) {
+    console.error("activateTrial failed:", error)
+    return {
+      success: false,
+      error: {
+        code: "PAYMENT_ERROR",
+        message: "Card didn't go through. Try a different card?",
       },
     }
   }

@@ -62,6 +62,55 @@ export const hostService = {
     })
   },
 
+  async activateTrial(
+    hostId: string,
+    data: {
+      subscriptionId: string
+      subscriptionStatus: string
+      trialEndsAt: Date
+    }
+  ) {
+    return prisma.host.update({
+      where: { id: hostId },
+      data: {
+        subscriptionId: data.subscriptionId,
+        subscriptionStatus: data.subscriptionStatus,
+        trialEndsAt: data.trialEndsAt,
+      },
+    })
+  },
+
+  async completeOnboarding(hostId: string) {
+    return prisma.host.update({
+      where: { id: hostId },
+      data: { onboardingCompleted: true },
+    })
+  },
+
+  async updateSubscriptionStatus(
+    hostId: string,
+    data: {
+      subscriptionStatus: string
+      subscriptionId?: string
+      trialEndsAt?: Date
+    }
+  ) {
+    return prisma.host.update({
+      where: { id: hostId },
+      data: {
+        subscriptionStatus: data.subscriptionStatus,
+        ...(data.subscriptionId && { subscriptionId: data.subscriptionId }),
+        ...(data.trialEndsAt && { trialEndsAt: data.trialEndsAt }),
+      },
+    })
+  },
+
+  async findBySubscriptionId(subscriptionId: string) {
+    return prisma.host.findFirst({
+      where: { subscriptionId },
+    })
+  },
+
   suggestSlug(slug: string): string {
     const suffix = Math.floor(10 + Math.random() * 90)
     return `${slug}-${suffix}`

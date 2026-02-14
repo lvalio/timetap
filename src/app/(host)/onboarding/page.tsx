@@ -7,6 +7,8 @@ import { ProfileForm } from "@/components/onboarding/profile-form"
 import { StripeConnectStep } from "@/components/onboarding/stripe-connect-step"
 import { GoogleCalendarStep } from "@/components/onboarding/google-calendar-step"
 import { PackageStep } from "@/components/onboarding/package-step"
+import { FreeTrialStep } from "@/components/onboarding/free-trial-step"
+import { OnboardingComplete } from "@/components/onboarding/onboarding-complete"
 import { saveProfile } from "./actions"
 import type { UpdateProfileInput } from "@/lib/validations/host"
 
@@ -41,7 +43,7 @@ const STEP_TITLES: Record<number, { title: string; description: string }> = {
   },
   5: {
     title: "Start Free Trial",
-    description: "Coming in Story 2.5",
+    description: "Start your free trial to go live.",
   },
 }
 
@@ -54,6 +56,10 @@ export default function OnboardingPage() {
   const [stripeError, setStripeError] = useState<string | null>(null)
   const [googleError, setGoogleError] = useState<string | null>(null)
   const [calendarConnected, setCalendarConnected] = useState(false)
+  const [isComplete, setIsComplete] = useState(false)
+  const [completionData, setCompletionData] = useState<{
+    slug: string
+  } | null>(null)
 
   const fetchHost = useCallback(async () => {
     const res = await fetch("/api/host/me")
@@ -129,6 +135,18 @@ export default function OnboardingPage() {
     })
   }
 
+  const handleTrialComplete = (data: {
+    trialEndsAt: string
+    slug: string
+  }) => {
+    setIsComplete(true)
+    setCompletionData({ slug: data.slug })
+  }
+
+  if (isComplete && completionData) {
+    return <OnboardingComplete slug={completionData.slug} />
+  }
+
   const stepInfo = STEP_TITLES[currentStep]
 
   return (
@@ -183,17 +201,7 @@ export default function OnboardingPage() {
         )}
 
         {currentStep === 5 && (
-          <div className="flex flex-col items-center py-12 text-center">
-            <p className="text-sm text-tt-text-muted">
-              {stepInfo.description}
-            </p>
-            <button
-              disabled
-              className="mt-6 w-full rounded-md bg-tt-divider py-2 text-sm text-tt-text-disabled"
-            >
-              Continue
-            </button>
-          </div>
+          <FreeTrialStep onComplete={handleTrialComplete} />
         )}
       </div>
     </div>

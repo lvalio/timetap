@@ -28,6 +28,8 @@ export async function GET() {
     googleRefreshToken: host.googleRefreshToken,
     bookableHours: host.bookableHours,
     stripeAccountId: host.stripeAccountId,
+    subscriptionStatus: host.subscriptionStatus,
+    trialEndsAt: host.trialEndsAt,
     onboardingCompleted: host.onboardingCompleted,
     packages,
   })

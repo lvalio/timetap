@@ -48,3 +48,9 @@ export const bookableHoursSchema = z.object(
 )
 
 export type BookableHoursInput = z.infer<typeof bookableHoursSchema>
+
+export const activateTrialSchema = z.object({
+  paymentMethodId: z.string().min(1, "Payment method is required"),
+})
+
+export type ActivateTrialInput = z.infer<typeof activateTrialSchema>

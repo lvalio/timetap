@@ -53,7 +53,7 @@ development_status:
   2-2-stripe-connect-integration: done
   2-3-google-calendar-connection-and-bookable-hours: review
   2-4-package-creation-and-management: review
-  2-5-free-trial-activation-and-onboarding-completion: backlog
+  2-5-free-trial-activation-and-onboarding-completion: review
   epic-2-retrospective: optional
 
   # Epic 3: Public Host Page & Free Session Booking

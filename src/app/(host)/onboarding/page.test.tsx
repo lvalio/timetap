@@ -1,3 +1,4 @@
+import React from "react"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen, waitFor } from "@testing-library/react"
 import OnboardingPage from "./page"
@@ -33,6 +34,25 @@ vi.mock("./actions", () => ({
   checkSlugAvailability: vi.fn(),
   saveBookableHours: vi.fn(),
   createPackage: vi.fn(),
+  activateTrial: vi.fn(),
+}))
+
+// Mock Stripe Elements
+vi.mock("@stripe/react-stripe-js", () => ({
+  Elements: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  CardElement: () => <div data-testid="card-element" />,
+  useStripe: () => ({
+    createPaymentMethod: vi.fn(),
+  }),
+  useElements: () => ({
+    getElement: vi.fn(),
+  }),
+}))
+
+vi.mock("@/lib/stripe/elements", () => ({
+  getStripe: () => Promise.resolve({}),
 }))
 
 describe("OnboardingPage", () => {
@@ -176,5 +196,14 @@ describe("OnboardingPage", () => {
         )
       ).toBeInTheDocument()
     })
+  })
+
+  it("shows step 5 description text correctly", () => {
+    render(<OnboardingPage />)
+
+    // Step 5 description should have been updated from "Coming in Story 2.5"
+    expect(
+      screen.queryByText("Coming in Story 2.5")
+    ).not.toBeInTheDocument()
   })
 })

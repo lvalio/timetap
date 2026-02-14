@@ -2,12 +2,16 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 
 const mockFindUnique = vi.fn()
 const mockCreate = vi.fn()
+const mockUpdate = vi.fn()
+const mockFindFirst = vi.fn()
 
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     host: {
       findUnique: (...args: unknown[]) => mockFindUnique(...args),
       create: (...args: unknown[]) => mockCreate(...args),
+      update: (...args: unknown[]) => mockUpdate(...args),
+      findFirst: (...args: unknown[]) => mockFindFirst(...args),
     },
   },
 }))
@@ -56,6 +60,107 @@ describe("hostService", () => {
         },
       })
       expect(result).toEqual(mockHost)
+    })
+  })
+
+  describe("activateTrial", () => {
+    it("updates host with subscription fields", async () => {
+      const trialEndsAt = new Date("2026-03-06T00:00:00Z")
+      const updatedHost = {
+        id: "host-1",
+        subscriptionId: "sub_123",
+        subscriptionStatus: "trialing",
+        trialEndsAt,
+      }
+      mockUpdate.mockResolvedValue(updatedHost)
+
+      const result = await hostService.activateTrial("host-1", {
+        subscriptionId: "sub_123",
+        subscriptionStatus: "trialing",
+        trialEndsAt,
+      })
+
+      expect(mockUpdate).toHaveBeenCalledWith({
+        where: { id: "host-1" },
+        data: {
+          subscriptionId: "sub_123",
+          subscriptionStatus: "trialing",
+          trialEndsAt,
+        },
+      })
+      expect(result).toEqual(updatedHost)
+    })
+  })
+
+  describe("completeOnboarding", () => {
+    it("sets onboardingCompleted to true", async () => {
+      const updatedHost = { id: "host-1", onboardingCompleted: true }
+      mockUpdate.mockResolvedValue(updatedHost)
+
+      const result = await hostService.completeOnboarding("host-1")
+
+      expect(mockUpdate).toHaveBeenCalledWith({
+        where: { id: "host-1" },
+        data: { onboardingCompleted: true },
+      })
+      expect(result).toEqual(updatedHost)
+    })
+  })
+
+  describe("updateSubscriptionStatus", () => {
+    it("updates subscription status", async () => {
+      mockUpdate.mockResolvedValue({ id: "host-1", subscriptionStatus: "active" })
+
+      await hostService.updateSubscriptionStatus("host-1", {
+        subscriptionStatus: "active",
+      })
+
+      expect(mockUpdate).toHaveBeenCalledWith({
+        where: { id: "host-1" },
+        data: { subscriptionStatus: "active" },
+      })
+    })
+
+    it("includes optional fields when provided", async () => {
+      const trialEndsAt = new Date("2026-03-06T00:00:00Z")
+      mockUpdate.mockResolvedValue({ id: "host-1" })
+
+      await hostService.updateSubscriptionStatus("host-1", {
+        subscriptionStatus: "trialing",
+        subscriptionId: "sub_new",
+        trialEndsAt,
+      })
+
+      expect(mockUpdate).toHaveBeenCalledWith({
+        where: { id: "host-1" },
+        data: {
+          subscriptionStatus: "trialing",
+          subscriptionId: "sub_new",
+          trialEndsAt,
+        },
+      })
+    })
+  })
+
+  describe("findBySubscriptionId", () => {
+    it("finds host by subscription ID", async () => {
+      const mockHost = { id: "host-1", subscriptionId: "sub_123" }
+      mockFindFirst.mockResolvedValue(mockHost)
+
+      const result = await hostService.findBySubscriptionId("sub_123")
+
+      expect(mockFindFirst).toHaveBeenCalledWith({
+        where: { subscriptionId: "sub_123" },
+      })
+      expect(result).toEqual(mockHost)
+    })
+
+    it("returns null when no host found", async () => {
+      mockFindFirst.mockResolvedValue(null)
+
+      const result = await hostService.findBySubscriptionId("sub_nonexistent")
+
+      expect(result).toBeNull()
     })
   })
 })
