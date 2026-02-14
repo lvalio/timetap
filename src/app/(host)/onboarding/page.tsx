@@ -1,8 +1,10 @@
 "use client"
 
-import { useState, useEffect, useTransition } from "react"
+import { useState, useEffect, useTransition, useCallback } from "react"
+import { useSearchParams } from "next/navigation"
 import { OnboardingStepper } from "@/components/onboarding/onboarding-stepper"
 import { ProfileForm } from "@/components/onboarding/profile-form"
+import { StripeConnectStep } from "@/components/onboarding/stripe-connect-step"
 import { saveProfile } from "./actions"
 import type { UpdateProfileInput } from "@/lib/validations/host"
 
@@ -11,6 +13,7 @@ interface HostData {
   name: string
   description: string | null
   slug: string | null
+  stripeAccountId: string | null
 }
 
 const STEP_TITLES: Record<number, { title: string; description: string }> = {
@@ -20,7 +23,8 @@ const STEP_TITLES: Record<number, { title: string; description: string }> = {
   },
   2: {
     title: "Connect Stripe",
-    description: "Coming in Story 2.2",
+    description:
+      "Connect your Stripe account so you can receive payments from your clients.",
   },
   3: {
     title: "Google Calendar & Bookable Hours",
@@ -37,21 +41,51 @@ const STEP_TITLES: Record<number, { title: string; description: string }> = {
 }
 
 export default function OnboardingPage() {
+  const searchParams = useSearchParams()
   const [currentStep, setCurrentStep] = useState(1)
   const [hostData, setHostData] = useState<HostData | null>(null)
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
+  const [stripeError, setStripeError] = useState<string | null>(null)
 
+  const fetchHost = useCallback(async () => {
+    const res = await fetch("/api/host/me")
+    if (res.ok) {
+      const data = await res.json()
+      setHostData(data)
+      return data as HostData
+    }
+    return null
+  }, [])
+
+  // Initial host data fetch
   useEffect(() => {
-    async function fetchHost() {
-      const res = await fetch("/api/host/me")
-      if (res.ok) {
-        const data = await res.json()
-        setHostData(data)
+    fetchHost()
+  }, [fetchHost])
+
+  // Handle return from Stripe OAuth
+  useEffect(() => {
+    const step = searchParams.get("step")
+    const stripe = searchParams.get("stripe")
+    const errorParam = searchParams.get("error")
+
+    if (step === "2") {
+      setCurrentStep(2)
+
+      if (stripe === "connected") {
+        // Re-fetch host data to confirm stripeAccountId is present, then advance
+        fetchHost().then((host) => {
+          if (host?.stripeAccountId) {
+            setCurrentStep(3)
+          }
+        })
+      }
+
+      if (errorParam === "stripe_connect_failed") {
+        setStripeError("stripe_connect_failed")
       }
     }
-    fetchHost()
-  }, [])
+  }, [searchParams, fetchHost])
 
   const handleProfileSubmit = async (data: UpdateProfileInput) => {
     setError(null)
@@ -99,7 +133,11 @@ export default function OnboardingPage() {
           />
         )}
 
-        {currentStep >= 2 && currentStep <= 5 && (
+        {currentStep === 2 && (
+          <StripeConnectStep error={stripeError} />
+        )}
+
+        {currentStep >= 3 && currentStep <= 5 && (
           <div className="flex flex-col items-center py-12 text-center">
             <p className="text-sm text-tt-text-muted">
               {stepInfo.description}

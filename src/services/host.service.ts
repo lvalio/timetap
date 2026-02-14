@@ -41,6 +41,13 @@ export const hostService = {
     return false
   },
 
+  async updateStripeAccountId(hostId: string, stripeAccountId: string) {
+    return prisma.host.update({
+      where: { id: hostId },
+      data: { stripeAccountId },
+    })
+  },
+
   suggestSlug(slug: string): string {
     const suffix = Math.floor(10 + Math.random() * 90)
     return `${slug}-${suffix}`

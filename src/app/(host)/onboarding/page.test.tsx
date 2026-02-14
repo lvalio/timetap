@@ -2,12 +2,19 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen, waitFor } from "@testing-library/react"
 import OnboardingPage from "./page"
 
+// Mock useSearchParams
+const mockSearchParams = new URLSearchParams()
+vi.mock("next/navigation", () => ({
+  useSearchParams: () => mockSearchParams,
+}))
+
 // Mock fetch for /api/host/me
 const mockHostData = {
   id: "host-1",
   name: "Sofia",
   description: "Life coach",
   slug: "sofia",
+  stripeAccountId: null,
 }
 
 vi.stubGlobal(
@@ -27,6 +34,10 @@ vi.mock("./actions", () => ({
 describe("OnboardingPage", () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    // Reset search params
+    for (const key of [...mockSearchParams.keys()]) {
+      mockSearchParams.delete(key)
+    }
     vi.mocked(fetch).mockResolvedValue({
       ok: true,
       json: () => Promise.resolve(mockHostData),
@@ -55,5 +66,48 @@ describe("OnboardingPage", () => {
         "Tell your clients who you are and choose your unique URL."
       )
     ).toBeInTheDocument()
+  })
+
+  it("shows step 2 with Stripe connect when step=2 in query", async () => {
+    mockSearchParams.set("step", "2")
+    render(<OnboardingPage />)
+
+    await waitFor(() => {
+      expect(screen.getByRole("heading", { name: "Connect Stripe" })).toBeInTheDocument()
+      expect(
+        screen.getByRole("button", { name: /connect stripe/i })
+      ).toBeInTheDocument()
+    })
+  })
+
+  it("shows error message on step 2 when error=stripe_connect_failed", async () => {
+    mockSearchParams.set("step", "2")
+    mockSearchParams.set("error", "stripe_connect_failed")
+    render(<OnboardingPage />)
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(/Stripe connection didn't go through/i)
+      ).toBeInTheDocument()
+    })
+  })
+
+  it("auto-advances to step 3 when stripe=connected and host has stripeAccountId", async () => {
+    mockSearchParams.set("step", "2")
+    mockSearchParams.set("stripe", "connected")
+
+    vi.mocked(fetch).mockResolvedValue({
+      ok: true,
+      json: () =>
+        Promise.resolve({ ...mockHostData, stripeAccountId: "acct_1ABC" }),
+    } as Response)
+
+    render(<OnboardingPage />)
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Google Calendar & Bookable Hours")
+      ).toBeInTheDocument()
+    })
   })
 })

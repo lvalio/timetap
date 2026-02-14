@@ -60,9 +60,12 @@ export default async function SettingsPage() {
               {host.stripeAccountId ? (
                 <span className="text-sm text-tt-success">Connected</span>
               ) : (
-                <span className="text-sm text-tt-text-muted">
-                  Not connected
-                </span>
+                <a
+                  href="/api/stripe/connect"
+                  className="text-sm text-tt-text-muted hover:text-tt-primary underline"
+                >
+                  Not connected — Connect
+                </a>
               )}
             </div>
           </div>
