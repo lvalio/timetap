@@ -61,7 +61,7 @@ development_status:
   3-1-public-host-page: done
   3-2-availability-engine: review
   3-3-free-session-booking-flow: review
-  3-4-google-calendar-sync-and-meet-link-generation: backlog
+  3-4-google-calendar-sync-and-meet-link-generation: ready-for-dev
   3-5-booking-emails-and-magic-link: backlog
   epic-3-retrospective: optional
 
