@@ -112,3 +112,35 @@ if (sub) {
 ```
 
 **Affected consumers:** Stripe webhook handler (`invoice.payment_failed` event)
+
+---
+
+## Fix #5 — `window` cast fails strict TypeScript on Vercel
+
+**Date:** 2026-02-15
+**Files:** `src/app/(public)/[slug]/book/booking-flow-client.tsx`, `src/components/booking/time-slot-picker.tsx`
+**Error:**
+
+```
+Type error: Conversion of type 'Window & typeof globalThis' to type 'Record<string, unknown>'
+may be a mistake because neither type sufficiently overlaps with the other.
+If this was intentional, convert the expression to 'unknown' first.
+```
+
+**Root cause:** `window as Record<string, unknown>` is rejected in strict mode because `Window & typeof globalThis` has no index signature, so TypeScript considers the direct cast unsafe.
+
+**Fix:** Cast through `unknown` first: `window as unknown as Record<string, unknown>`.
+
+**Before:**
+```tsx
+const refresh = (window as Record<string, unknown>)
+  .__refreshAvailability as (() => void) | undefined
+```
+
+**After:**
+```tsx
+const refresh = (window as unknown as Record<string, unknown>)
+  .__refreshAvailability as (() => void) | undefined
+```
+
+**Affected files:** 3 occurrences total (1 in `booking-flow-client.tsx`, 2 in `time-slot-picker.tsx`)

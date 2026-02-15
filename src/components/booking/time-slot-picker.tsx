@@ -110,13 +110,13 @@ export function TimeSlotPicker({
 
   // Expose refresh for parent to call after SLOT_TAKEN
   useEffect(() => {
-    ;(window as Record<string, unknown>).__refreshAvailability = () => {
+    ;(window as unknown as Record<string, unknown>).__refreshAvailability = () => {
       setSelectedSlot(null)
       onSlotDeselected()
       fetchAvailability()
     }
     return () => {
-      delete (window as Record<string, unknown>).__refreshAvailability
+      delete (window as unknown as Record<string, unknown>).__refreshAvailability
     }
   }, [fetchAvailability, onSlotDeselected])
 

@@ -82,7 +82,7 @@ export function BookingFlowClient({
       setSelectedSlot(null)
       setSelectedDayLabel("")
       // Trigger availability refresh
-      const refresh = (window as Record<string, unknown>)
+      const refresh = (window as unknown as Record<string, unknown>)
         .__refreshAvailability as (() => void) | undefined
       refresh?.()
     } else if (result.error.code === "VALIDATION_ERROR") {
